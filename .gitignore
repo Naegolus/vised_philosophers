@@ -1,0 +1,8 @@
+
+obj/*.o
+obj/*.d
+obj/single
+obj/multi
+
+doc/*.png
+
