@@ -51,7 +51,7 @@ public:
 	void bind(T *p_data, uint32_t capacity = 1)
 	{
 		_p_data = p_data;
-		_capacity = capacity;
+		_numToken = _capacity = capacity;
 	}
 
 	T *data() const /* function data() doesn't change this class, but the data may be changed */
