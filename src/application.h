@@ -34,6 +34,7 @@
 #include <cstdint>
 #include "data_token.h"
 #include "table.h"
+#include "philosopher.h"
 
 class Application
 {
@@ -46,6 +47,7 @@ private:
 	const uint32_t NUM_PHILOSOPHERS = 5;
 
 	Table _tableNr44;
+	Philosopher *_p_philosophers;
 };
 
 #endif /* APPLICATION_H_ */

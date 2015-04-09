@@ -30,7 +30,7 @@
 
 #include "application.h"
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
+Application::Application() : _tableNr44(NUM_PHILOSOPHERS), _p_philosophers(0)
 {
 }
 
