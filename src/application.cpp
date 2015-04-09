@@ -30,11 +30,14 @@
 
 #include "application.h"
 
-Application app;
-
-int main()
+Application::Application()
 {
-	app.execute();
+}
 
-	return 0;
+Application::~Application()
+{
+}
+
+void Application::execute()
+{
 }

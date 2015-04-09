@@ -28,13 +28,18 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#ifndef APPLICATION_H_
+#define APPLICATION_H_
 
-Application app;
+#include "data_token.h"
 
-int main()
+class Application
 {
-	app.execute();
+public:
+	Application();
+	virtual ~Application();
 
-	return 0;
-}
+	void execute();
+};
+
+#endif /* APPLICATION_H_ */
