@@ -30,7 +30,13 @@
 
 #include "philosopher.h"
 
-Philosopher::Philosopher()
+/* todo:
+ * - States/Signals no couts:
+ *   - isHungry
+ *   - isEating
+ *   - isThinking */
+
+Philosopher::Philosopher() : _p_leftFork(0), _p_rightFork(0)
 {
 }
 
