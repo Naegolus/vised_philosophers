@@ -31,6 +31,7 @@
 #ifndef SRC_DATA_TOKEN_H_
 #define SRC_DATA_TOKEN_H_
 
+#include <cstdint>
 #include <iostream>
 
 template<typename T>
@@ -39,17 +40,18 @@ class DataToken
 	friend class Transition;
 
 public:
-	DataToken() : _p_data(0), _isTaken(false)
+	DataToken() : _p_data(0), _capacity(1), _numToken(1)
 	{
 	}
 
-	DataToken(T *p_data) : _p_data(p_data), _isTaken(false)
+	DataToken(T *p_data) : _p_data(p_data), _capacity(1), _numToken(1)
 	{
 	}
 
-	void bind(T *p_data)
+	void bind(T *p_data, uint32_t capacity = 1)
 	{
 		_p_data = p_data;
+		_capacity = capacity;
 	}
 
 	T *data() const /* function data() doesn't change this class, but the data may be changed */
@@ -60,19 +62,31 @@ public:
 	virtual ~DataToken() {}
 
 private:
-	bool isTaken() const
+	bool isEmpty() const
 	{
 		if(!_p_data)
 		{
-			std::cout << "Error in DataToken::isTaken(): Token requested before data has been bound to token" << std::endl;
+			std::cout << "Error in DataToken::isEmpty(): Token requested before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
 		}
 
-		return _isTaken;
+		return !_numToken;
+	}
+	bool isFull() const
+	{
+		if(!_p_data)
+		{
+			std::cout << "Error in DataToken::isFull(): Token released before data has been bound to token" << std::endl;
+			return true; /* we are lying, but no one should use a null pointer */
+		}
+
+		return _numToken == _capacity;
 	}
 
 	T *_p_data;
-	bool _isTaken;
+	/* this two members are changed directly by class Transition */
+	uint32_t _capacity;
+	uint32_t _numToken;
 };
 
 #endif /* SRC_DATA_TOKEN_H_ */
