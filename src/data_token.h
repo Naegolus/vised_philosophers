@@ -52,7 +52,7 @@ public:
 		_p_data = p_data;
 	}
 
-	T *data() const /* data() doesn't change this class, but the data may be changed */
+	T *data() const /* function data() doesn't change this class, but the data may be changed */
 	{
 		return _p_data;
 	}
@@ -65,7 +65,7 @@ private:
 		if(!_p_data)
 		{
 			std::cout << "Error in DataToken::isTaken(): Token requested before data has been bound to token" << std::endl;
-			return true; /* no one should use a null pointer */
+			return true; /* we are lying, but no one should use a null pointer */
 		}
 
 		return _isTaken;
