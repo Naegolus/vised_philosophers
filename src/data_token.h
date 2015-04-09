@@ -42,7 +42,7 @@ public:
 	virtual ~DataToken() {}
 
 private:
-	DataToken() : _p_data(NULL), _isTaken(false) {}
+	DataToken() : _p_data(0), _isTaken(false) {}
 
 	T *_p_data;
 	bool _isTaken;
