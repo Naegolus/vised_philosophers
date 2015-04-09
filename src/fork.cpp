@@ -30,7 +30,7 @@
 
 #include "fork.h"
 
-Fork::Fork()
+Fork::Fork() : _isDirty(false)
 {
 }
 
@@ -38,3 +38,17 @@ Fork::~Fork()
 {
 }
 
+void Fork::makeDirty()
+{
+	_isDirty = true;
+}
+
+void Fork::makeClean()
+{
+	_isDirty = false;
+}
+
+bool Fork::isDirty() const
+{
+	return _isDirty;
+}

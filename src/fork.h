@@ -38,6 +38,13 @@ class Fork : public Object
 public:
 	Fork();
 	virtual ~Fork();
+
+	void makeDirty(); /* non const -> changes fork */
+	void makeClean();
+
+	bool isDirty() const;
+private:
+	bool _isDirty;
 };
 
 #endif /* SRC_FORK_H_ */
