@@ -28,16 +28,13 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#include "philosopher.h"
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
+Philosopher::Philosopher()
 {
 }
 
-Application::~Application()
+Philosopher::~Philosopher()
 {
 }
 
-void Application::execute()
-{
-}

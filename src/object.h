@@ -28,16 +28,18 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#ifndef OBJECT_H_
+#define OBJECT_H_
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
-{
-}
+#include "sigslot.h"
 
-Application::~Application()
-{
-}
+using namespace sigslot;
 
-void Application::execute()
+class Object : public has_slots<>
 {
-}
+public:
+	Object() {}
+	virtual ~Object() {}
+};
+
+#endif /* OBJECT_H_ */

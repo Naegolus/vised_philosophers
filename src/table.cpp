@@ -28,16 +28,13 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#include "table.h"
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
+Table::Table(uint32_t numForks)
 {
 }
 
-Application::~Application()
+Table::~Table()
 {
 }
 
-void Application::execute()
-{
-}

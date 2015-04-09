@@ -28,16 +28,13 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#include "fork.h"
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
+Fork::Fork()
 {
 }
 
-Application::~Application()
+Fork::~Fork()
 {
 }
 
-void Application::execute()
-{
-}

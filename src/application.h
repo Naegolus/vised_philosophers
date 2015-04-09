@@ -31,7 +31,9 @@
 #ifndef APPLICATION_H_
 #define APPLICATION_H_
 
+#include <cstdint>
 #include "data_token.h"
+#include "table.h"
 
 class Application
 {
@@ -40,6 +42,10 @@ public:
 	virtual ~Application();
 
 	void execute();
+private:
+	const uint32_t NUM_PHILOSOPHERS = 5;
+
+	Table _tableNr44;
 };
 
 #endif /* APPLICATION_H_ */

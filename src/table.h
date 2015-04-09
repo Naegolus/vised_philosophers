@@ -28,16 +28,22 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#ifndef SRC_TABLE_H_
+#define SRC_TABLE_H_
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
-{
-}
+#include <cstdint>
+#include "object.h"
+#include "fork.h"
 
-Application::~Application()
+class Table : public Object
 {
-}
+public:
+	Table(uint32_t numForks);
+	virtual ~Table();
+private:
+	Table() : _p_forks(0) {}
 
-void Application::execute()
-{
-}
+	Fork *_p_forks;
+};
+
+#endif /* SRC_TABLE_H_ */

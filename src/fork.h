@@ -28,16 +28,16 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#ifndef SRC_FORK_H_
+#define SRC_FORK_H_
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
-{
-}
+#include "object.h"
 
-Application::~Application()
+class Fork : public Object
 {
-}
+public:
+	Fork();
+	virtual ~Fork();
+};
 
-void Application::execute()
-{
-}
+#endif /* SRC_FORK_H_ */

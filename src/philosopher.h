@@ -28,16 +28,23 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "application.h"
+#ifndef SRC_PHILOSOPHER_H_
+#define SRC_PHILOSOPHER_H_
 
-Application::Application() : _tableNr44(NUM_PHILOSOPHERS)
-{
-}
+#include "object.h"
+#include "transition.h"
+#include "fork.h"
 
-Application::~Application()
-{
-}
+typedef DataToken<Fork> ForkToken;
 
-void Application::execute()
+class Philosopher : public Object
 {
-}
+public:
+	Philosopher();
+	virtual ~Philosopher();
+private:
+	ForkToken *_p_leftFork;
+	ForkToken *_p_rightFork;
+};
+
+#endif /* SRC_PHILOSOPHER_H_ */

@@ -31,18 +31,45 @@
 #ifndef SRC_DATA_TOKEN_H_
 #define SRC_DATA_TOKEN_H_
 
+#include <iostream>
+
 template<typename T>
-class DataToken : public T
+class DataToken
 {
+	friend class Transition;
+
 public:
+	DataToken() : _p_data(0), _isTaken(false)
+	{
+	}
+
 	DataToken(T *p_data) : _p_data(p_data), _isTaken(false)
 	{
+	}
+
+	void bind(T *p_data)
+	{
+		_p_data = p_data;
+	}
+
+	T *data() const /* data() doesn't change this class, but the data may be changed */
+	{
+		return _p_data;
 	}
 
 	virtual ~DataToken() {}
 
 private:
-	DataToken() : _p_data(0), _isTaken(false) {}
+	bool isTaken() const
+	{
+		if(!_p_data)
+		{
+			std::cout << "Error in DataToken::isTaken(): Token requested before data has been bound to token" << std::endl;
+			return true; /* no one should use a null pointer */
+		}
+
+		return _isTaken;
+	}
 
 	T *_p_data;
 	bool _isTaken;
