@@ -43,14 +43,15 @@ public:
 	Philosopher();
 	virtual ~Philosopher();
 
+	void setHisForks(ForkToken &leftFork, ForkToken &rightFork);
 	void doStuff();
 
 	/* signals */
 	signal0<> finishedThinking;
 
 private:
-	ForkToken *_leftFork;
-	ForkToken *_rightFork;
+	Fork *_leftFork;
+	Fork *_rightFork;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
