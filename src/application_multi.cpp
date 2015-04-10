@@ -97,7 +97,7 @@ void Application::connectObjects()
 
 		/* bind fork token to philosophers */
 		uint32_t n = NUM_PHILOSOPHERS - 1 != i ? i + 1 : 0;
-		phil->setHisForks(token[i], token[n]);
+		phil->setHisForks(&token[i], &token[n]);
 
 		/* optional begin */
 			phil->startedEating.connect(this, &Application::onPhilosopherStartedEating);

@@ -44,7 +44,7 @@ public:
 	Philosopher();
 	virtual ~Philosopher();
 
-	void setHisForks(ForkToken &leftFork, ForkToken &rightFork);
+	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
 	void doStuff();
 
 	/* signals */

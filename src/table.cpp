@@ -40,7 +40,7 @@ Table::~Table()
 	delete[] _forks;
 }
 
-Fork &Table::fork(uint32_t idx) const
+Fork *Table::fork(uint32_t idx) const
 {
-	return _forks[idx];
+	return &_forks[idx];
 }

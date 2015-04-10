@@ -41,8 +41,8 @@ public:
 	Transition();
 	virtual ~Transition();
 
-	void addInput(DataTokenBase &token);
-	void addOutput(DataTokenBase &token);
+	void addInput(DataTokenBase *token);
+	void addOutput(DataTokenBase *token);
 
 	bool fired();
 

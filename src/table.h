@@ -41,7 +41,7 @@ public:
 	Table(uint32_t numForks);
 	virtual ~Table();
 
-	Fork &fork(uint32_t idx) const;
+	Fork *fork(uint32_t idx) const;
 
 private:
 	Table() : _forks(0) {}

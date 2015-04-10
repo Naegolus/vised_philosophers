@@ -42,10 +42,10 @@ Philosopher::~Philosopher()
 {
 }
 
-void Philosopher::setHisForks(ForkToken &leftFork, ForkToken &rightFork)
+void Philosopher::setHisForks(ForkToken *leftFork, ForkToken *rightFork)
 {
-	_leftFork = &leftFork.data();
-	_rightFork = &rightFork.data();
+	_leftFork = leftFork->data();
+	_rightFork = rightFork->data();
 
 	acquireForks.addInput(leftFork);
 	acquireForks.addInput(rightFork);

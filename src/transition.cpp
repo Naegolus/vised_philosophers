@@ -46,14 +46,14 @@ Transition::~Transition()
 {
 }
 
-void Transition::addInput(DataTokenBase &token)
+void Transition::addInput(DataTokenBase *token)
 {
-	inputs.push_back(&token);
+	inputs.push_back(token);
 }
 
-void Transition::addOutput(DataTokenBase &token)
+void Transition::addOutput(DataTokenBase *token)
 {
-	outputs.push_back(&token);
+	outputs.push_back(token);
 }
 
 bool Transition::fired()

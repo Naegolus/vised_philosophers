@@ -93,19 +93,19 @@ class DataToken : public DataTokenBase
 {
 public:
 	DataToken() {}
-	DataToken(T &data) : DataTokenBase(&data) {}
-	DataToken(T &data, uint32_t capacity) : DataTokenBase(&data, capacity) {}
+	DataToken(T *data) : DataTokenBase(&data) {}
+	DataToken(T *data, uint32_t capacity) : DataTokenBase(data, capacity) {}
 	virtual ~DataToken() {}
 
-	void bind(T &data, uint32_t capacity = 1)
+	void bind(T *data, uint32_t capacity = 1)
 	{
-		setData(&data);
+		setData(data);
 		setCapacity(capacity);
 	}
 
-	T &data() const /* function data() doesn't change this class, but the data may be changed */
+	T *data() const /* function data() doesn't change this class, but the data may be changed */
 	{
-		return *((T *)voidData());
+		return (T *)voidData();
 	}
 };
 
