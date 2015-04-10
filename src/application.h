@@ -48,7 +48,11 @@ public:
 	void execute();
 
 	/* slots */
-	void onPhilosopherFinished();
+	void onPhilosopherFinishedThinking();
+	void onPhilosopherStartedThinking();
+	void onPhilosopherIsHungry();
+	void onPhilosopherStartedEating();
+	void onPhilosopherFinishedEating();
 
 private:
 	bool allPhilosophersFinished();

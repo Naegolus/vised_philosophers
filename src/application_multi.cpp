@@ -60,7 +60,7 @@ void Application::execute()
 	{
 		_threads[i].ticked.connect(&_philosophers[i], &Philosopher::doStuff);
 		_philosophers[i].finished.connect(&_threads[i], &ThreadLoop::requestFinish);
-		_philosophers[i].finished.connect(this, &Application::onPhilosopherFinished);
+		_philosophers[i].finished.connect(this, &Application::onPhilosopherFinishedThinking);
 
 		_threads[i].start(MAIN_INTERVAL);
 	}
@@ -91,9 +91,25 @@ bool Application::allPhilosophersFinished()
 	return true;
 }
 
-void Application::onPhilosopherFinished()
+void Application::onPhilosopherFinishedThinking()
 {
 	_mtx_cout.lock();
 		cout << "<x> done" << endl;
 	_mtx_cout.unlock();
+}
+
+void Application::onPhilosopherStartedThinking()
+{
+}
+
+void Application::onPhilosopherIsHungry()
+{
+}
+
+void Application::onPhilosopherStartedEating()
+{
+}
+
+void Application::onPhilosopherFinishedEating()
+{
 }
