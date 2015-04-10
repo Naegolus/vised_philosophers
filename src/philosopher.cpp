@@ -48,6 +48,12 @@ void Philosopher::setHisForks(ForkToken &leftFork, ForkToken &rightFork)
 {
 	_leftFork = &leftFork.data();
 	_rightFork = &rightFork.data();
+
+	acquireForks.addInput(leftFork);
+	acquireForks.addInput(rightFork);
+
+	releaseForks.addOutput(leftFork);
+	releaseForks.addOutput(rightFork);
 }
 
 void Philosopher::doStuff()
