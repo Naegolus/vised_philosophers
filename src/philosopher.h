@@ -55,6 +55,15 @@ private:
 
 	Transition acquireForks;
 	Transition releaseForks;
+
+	typedef enum
+	{
+		StateHungry = 0,
+		StateEating,
+		StateThinking
+	} PhilosopherState;
+
+	PhilosopherState _state;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
