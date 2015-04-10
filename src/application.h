@@ -48,6 +48,7 @@ public:
 	virtual ~Application();
 
 	void execute();
+	void connectObjects();
 
 	/* slots */
 	void onPhilosopherFinishedThinking();
@@ -65,6 +66,7 @@ private:
 	Table _tableNr44;
 	Philosopher *_philosophers;
 	ThreadLoop *_threads;
+	ForkToken *_forkToken;
 
 	const uint32_t NUM_PHILOSOPHERS = 5;
 	const uint32_t MAIN_INTERVAL = 50;

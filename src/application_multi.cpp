@@ -39,12 +39,16 @@ Application::Application() :
 			_philosophers(0),
 			_threads(0)
 {
+	_philosophers = new Philosopher[NUM_PHILOSOPHERS];
+	_threads = new ThreadLoop[NUM_PHILOSOPHERS];
+	_forkToken = new ForkToken[NUM_PHILOSOPHERS];
 }
 
 Application::~Application()
 {
 	delete[] _philosophers;
 	delete[] _threads;
+	delete[] _forkToken;
 }
 
 void Application::execute()
@@ -53,18 +57,7 @@ void Application::execute()
 
 	cout << "Executing multi threaded Application" << endl << endl;
 
-	_philosophers = new Philosopher[NUM_PHILOSOPHERS];
-	_threads = new ThreadLoop[NUM_PHILOSOPHERS];
-
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
-	{
-		_threads[i].ticked.connect(&_philosophers[i], &Philosopher::doStuff);
-		_philosophers[i].finishedThinking.connect(&_threads[i], &ThreadLoop::requestFinish);
-
-		/* optional begin */
-			_philosophers[i].finishedThinking.connect(this, &Application::onPhilosopherFinishedThinking);
-		/* optional end */
-	}
+	connectObjects();
 
 	/* start thread as soon as everything is connected */
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
@@ -85,12 +78,45 @@ void Application::execute()
 
 }
 
-bool Application::allPhilosophersFinished()
+void Application::connectObjects()
 {
+	Philosopher *phil = _philosophers;
+	ThreadLoop *thread = _threads;
+	ForkToken *token = _forkToken;
+
+		/* bind forks to token */
+	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+		token->bind(_tableNr44.fork(i));
+
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 	{
-		if(!_threads[i].isFinished())
+		thread->ticked.connect(phil, &Philosopher::doStuff);
+		phil->finishedThinking.connect(thread, &ThreadLoop::requestFinish);
+
+		/* bind fork token to philosophers */
+		uint32_t n = NUM_PHILOSOPHERS - 1 != i ? i + 1 : 0;
+		phil->setHisForks(token[i], token[n]);
+
+		/* optional begin */
+			phil->finishedThinking.connect(this, &Application::onPhilosopherFinishedThinking);
+		/* optional end */
+
+		++phil;
+		++thread;
+		++token;
+	}
+}
+
+bool Application::allPhilosophersFinished()
+{
+	ThreadLoop *thread = _threads;
+
+	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	{
+		if(!thread->isFinished())
 			return false;
+
+		++thread;
 	}
 
 	return true;
