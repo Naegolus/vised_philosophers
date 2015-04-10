@@ -52,6 +52,9 @@ public:
 private:
 	Fork *_leftFork;
 	Fork *_rightFork;
+
+	Transition acquireForks;
+	Transition releaseForks;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
