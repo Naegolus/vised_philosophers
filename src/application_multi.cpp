@@ -85,19 +85,28 @@ void Application::connectObjects()
 	Philosopher *phil = _philosophers;
 	ThreadLoop *thread = _threads;
 	ForkToken *token = _forkToken;
+	ForkToken *tokenRight;
 
 		/* bind forks to token */
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	{
 		token->bind(_tableNr44.fork(i));
+		++token;
+	}
 
+	token = _forkToken;
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 	{
 		thread->ticked.connect(phil, &Philosopher::doStuff);
 		phil->finishedThinking.connect(thread, &ThreadLoop::requestFinish);
 
 		/* bind fork token to philosophers */
-		uint32_t n = NUM_PHILOSOPHERS - 1 != i ? i + 1 : 0;
-		phil->setHisForks(&token[i], &token[n]);
+		if(0 != i)
+			tokenRight = token - 1;
+		else
+			tokenRight = &token[NUM_PHILOSOPHERS - 1];
+
+		phil->setHisForks(token, tokenRight);
 
 		/* optional begin */
 			phil->startedEating.connect(this, &Application::onPhilosopherStartedEating);
