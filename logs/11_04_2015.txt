@@ -1,0 +1,65 @@
+$ ./obj/multi
+Executing multi threaded Application
+
+<x> started eating
+<x> started eating
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> is hungry
+<x> started eating
+<x> is hungry
+<x> started thinking
+<x> started eating
+<x> finished thinking
+<x> started thinking
+<x> started eating
+<x> started thinking
+<x> finished thinking
+<x> started eating
+<x> finished thinking
+<x> started thinking
+<x> finished thinking
+<x> started thinking
+<x> finished thinking
+
+Application finished
