@@ -46,7 +46,7 @@ public:
 	void doStuff();
 
 	/* signals */
-	signal0<> finished;
+	signal0<> finishedThinking;
 
 private:
 	ForkToken &_leftFork;

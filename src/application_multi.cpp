@@ -59,11 +59,16 @@ void Application::execute()
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 	{
 		_threads[i].ticked.connect(&_philosophers[i], &Philosopher::doStuff);
-		_philosophers[i].finished.connect(&_threads[i], &ThreadLoop::requestFinish);
-		_philosophers[i].finished.connect(this, &Application::onPhilosopherFinishedThinking);
+		_philosophers[i].finishedThinking.connect(&_threads[i], &ThreadLoop::requestFinish);
 
-		_threads[i].start(MAIN_INTERVAL);
+		/* optional begin */
+			_philosophers[i].finishedThinking.connect(this, &Application::onPhilosopherFinishedThinking);
+		/* optional end */
 	}
+
+	/* start thread as soon as everything is connected */
+	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+		_threads[i].start(MAIN_INTERVAL);
 
 	while(_appRunning)
 	{
@@ -91,6 +96,7 @@ bool Application::allPhilosophersFinished()
 	return true;
 }
 
+/* optional begin */
 void Application::onPhilosopherFinishedThinking()
 {
 	Lock lock(_mtx_cout);
@@ -117,3 +123,4 @@ void Application::onPhilosopherFinishedEating()
 {
 	Lock lock(_mtx_cout);
 }
+/* optional end */
