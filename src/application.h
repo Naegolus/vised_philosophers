@@ -49,10 +49,10 @@ public:
 	void connectObjects();
 
 	/* slots */
-	void onPhilosopherFinishedThinking();
+	void onPhilosopherStartedEating();
 	void onPhilosopherStartedThinking();
 	void onPhilosopherIsHungry();
-	void onPhilosopherStartedEating();
+	void onPhilosopherFinishedThinking();
 
 private:
 	bool allPhilosophersFinished();
