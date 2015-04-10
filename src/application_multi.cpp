@@ -36,7 +36,7 @@ using namespace std;
 typedef lock_guard<mutex> Lock;
 
 Application::Application() :
-			_appRunning(false),
+			_appRunning(true),
 			_tableNr44(NUM_PHILOSOPHERS),
 			_philosophers(0),
 			_threads(0)
