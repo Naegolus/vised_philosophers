@@ -125,11 +125,11 @@ bool Application::allPhilosophersFinished()
 }
 
 /* optional begin */
-void Application::onPhilosopherFinishedThinking()
+void Application::onPhilosopherStartedEating()
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> finished thinking" << endl;
+	cout << "<x> started eating" << endl;
 }
 
 void Application::onPhilosopherStartedThinking()
@@ -146,10 +146,11 @@ void Application::onPhilosopherIsHungry()
 	cout << "<x> is hungry" << endl;
 }
 
-void Application::onPhilosopherStartedEating()
+void Application::onPhilosopherFinishedThinking()
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> started eating" << endl;
+	cout << "<x> finished thinking" << endl;
 }
+
 /* optional end */
