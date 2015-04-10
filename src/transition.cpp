@@ -28,29 +28,55 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef SRC_TRANSITION_H_
-#define SRC_TRANSITION_H_
+#include "transition.h"
 
-#include <mutex>
-#include <list>
-#include "data_token.h"
+using namespace std;
 
-class Transition
+typedef lock_guard<mutex> Lock;
+typedef list<DataTokenBase *>::const_iterator ConstIter;
+typedef list<DataTokenBase *>::iterator Iter;
+
+mutex Transition::_mtxFire;
+
+Transition::Transition()
 {
-public:
-	Transition();
-	virtual ~Transition();
+}
 
-	void addInput(DataTokenBase &token);
-	void addOutput(DataTokenBase &token);
+Transition::~Transition()
+{
+}
 
-	bool fired();
+void Transition::addInput(DataTokenBase &token)
+{
+	inputs.push_back(&token);
+}
 
-private:
-	static std::mutex _mtxFire;
+void Transition::addOutput(DataTokenBase &token)
+{
+	outputs.push_back(&token);
+}
 
-	std::list<DataTokenBase *> inputs;
-	std::list<DataTokenBase *> outputs;
-};
+bool Transition::fired()
+{
+	Lock lock(_mtxFire);
 
-#endif /* SRC_TRANSITION_H_ */
+	/* check if transition is able to fire */
+	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
+	{
+		if((*token)->isEmpty())
+			return false;
+	}
+	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
+	{
+		if((*token)->isFull())
+			return false;
+	}
+
+	/* all conditions met -> fire */
+	for(Iter token = inputs.begin(); token != inputs.end(); ++token)
+		--(*token)->_numToken;
+	for(Iter token = outputs.begin(); token != outputs.end(); ++token)
+		++(*token)->_numToken;
+
+	return true;
+}
