@@ -129,26 +129,34 @@ void Application::onPhilosopherFinishedThinking()
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> done" << endl;
+	cout << "<x> finished thinking" << endl;
 }
 
 void Application::onPhilosopherStartedThinking()
 {
 	Lock lock(_mtxCout);
+
+	cout << "<x> started thinking" << endl;
 }
 
 void Application::onPhilosopherIsHungry()
 {
 	Lock lock(_mtxCout);
+
+	cout << "<x> is hungry" << endl;
 }
 
 void Application::onPhilosopherStartedEating()
 {
 	Lock lock(_mtxCout);
+
+	cout << "<x> started eating" << endl;
 }
 
 void Application::onPhilosopherFinishedEating()
 {
 	Lock lock(_mtxCout);
+
+	cout << "<x> finished eating" << endl;
 }
 /* optional end */
