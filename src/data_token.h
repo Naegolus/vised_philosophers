@@ -95,6 +95,7 @@ public:
 	DataToken() {}
 	DataToken(T &data) : DataTokenBase(&data) {}
 	DataToken(T &data, uint32_t capacity) : DataTokenBase(&data, capacity) {}
+	virtual ~DataToken() {}
 
 	void bind(T &data, uint32_t capacity = 1)
 	{
@@ -106,8 +107,6 @@ public:
 	{
 		return *((T *)voidData());
 	}
-
-	virtual ~DataToken() {}
 };
 
 #endif /* SRC_DATA_TOKEN_H_ */
