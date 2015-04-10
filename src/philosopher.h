@@ -42,6 +42,12 @@ class Philosopher : public Object
 public:
 	Philosopher();
 	virtual ~Philosopher();
+
+	void doStuff();
+
+	/* signals */
+	signal0<> finished;
+
 private:
 	ForkToken *_p_leftFork;
 	ForkToken *_p_rightFork;

@@ -44,3 +44,6 @@ Philosopher::~Philosopher()
 {
 }
 
+void Philosopher::doStuff()
+{
+}
