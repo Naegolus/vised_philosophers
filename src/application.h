@@ -39,6 +39,8 @@
 #include "philosopher.h"
 #include "thread_loop.h"
 
+typedef std::lock_guard<std::mutex> Lock;
+
 class Application : public Object
 {
 public:

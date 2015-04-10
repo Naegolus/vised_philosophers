@@ -93,23 +93,27 @@ bool Application::allPhilosophersFinished()
 
 void Application::onPhilosopherFinishedThinking()
 {
-	_mtx_cout.lock();
-		cout << "<x> done" << endl;
-	_mtx_cout.unlock();
+	Lock lock(_mtx_cout);
+
+	cout << "<x> done" << endl;
 }
 
 void Application::onPhilosopherStartedThinking()
 {
+	Lock lock(_mtx_cout);
 }
 
 void Application::onPhilosopherIsHungry()
 {
+	Lock lock(_mtx_cout);
 }
 
 void Application::onPhilosopherStartedEating()
 {
+	Lock lock(_mtx_cout);
 }
 
 void Application::onPhilosopherFinishedEating()
 {
+	Lock lock(_mtx_cout);
 }
