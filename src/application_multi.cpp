@@ -100,6 +100,9 @@ void Application::connectObjects()
 		phil->setHisForks(token[i], token[n]);
 
 		/* optional begin */
+			phil->startedEating.connect(this, &Application::onPhilosopherStartedEating);
+			phil->startedThinking.connect(this, &Application::onPhilosopherStartedThinking);
+			phil->isHungry.connect(this, &Application::onPhilosopherIsHungry);
 			phil->finishedThinking.connect(this, &Application::onPhilosopherFinishedThinking);
 		/* optional end */
 
