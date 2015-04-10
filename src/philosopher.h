@@ -47,6 +47,9 @@ public:
 	void doStuff();
 
 	/* signals */
+	signal0<> startedEating;
+	signal0<> startedThinking;
+	signal0<> isHungry;
 	signal0<> finishedThinking;
 
 private:
