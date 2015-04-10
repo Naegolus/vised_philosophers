@@ -36,7 +36,7 @@
  *   - isEating
  *   - isThinking */
 
-Philosopher::Philosopher() : _p_leftFork(0), _p_rightFork(0)
+Philosopher::Philosopher() : _leftFork(0), _rightFork(0)
 {
 }
 
