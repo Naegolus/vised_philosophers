@@ -50,13 +50,13 @@ public:
 
 	void bind(T &data, uint32_t capacity = 1)
 	{
-		_data = data;
+		_data = &data;
 		_numToken = _capacity = capacity;
 	}
 
 	T &data() const /* function data() doesn't change this class, but the data may be changed */
 	{
-		return _data;
+		return *_data;
 	}
 
 	virtual ~DataToken() {}
@@ -83,7 +83,7 @@ private:
 		return _numToken == _capacity;
 	}
 
-	T &_data;
+	T *_data;
 	/* this two members are changed directly by class Transition */
 	uint32_t _capacity;
 	uint32_t _numToken;
