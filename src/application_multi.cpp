@@ -152,11 +152,4 @@ void Application::onPhilosopherStartedEating()
 
 	cout << "<x> started eating" << endl;
 }
-
-void Application::onPhilosopherFinishedEating()
-{
-	Lock lock(_mtxCout);
-
-	cout << "<x> finished eating" << endl;
-}
 /* optional end */

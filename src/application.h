@@ -53,7 +53,6 @@ public:
 	void onPhilosopherStartedThinking();
 	void onPhilosopherIsHungry();
 	void onPhilosopherStartedEating();
-	void onPhilosopherFinishedEating();
 
 private:
 	bool allPhilosophersFinished();
