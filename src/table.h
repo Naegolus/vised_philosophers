@@ -40,10 +40,13 @@ class Table : public Object
 public:
 	Table(uint32_t numForks);
 	virtual ~Table();
-private:
-	Table() : _p_forks(0) {}
 
-	Fork *_p_forks;
+	Fork &fork(uint32_t idx) const;
+
+private:
+	Table() : _forks(0) {}
+
+	Fork *_forks;
 };
 
 #endif /* SRC_TABLE_H_ */

@@ -32,9 +32,15 @@
 
 Table::Table(uint32_t numForks)
 {
+	_forks = new Fork[numForks];
 }
 
 Table::~Table()
 {
+	delete[] _forks;
 }
 
+Fork &Table::fork(uint32_t idx) const
+{
+	return _forks[idx];
+}
