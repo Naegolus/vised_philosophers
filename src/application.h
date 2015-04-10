@@ -32,22 +32,37 @@
 #define APPLICATION_H_
 
 #include <cstdint>
+#include <mutex>
+#include "object.h"
 #include "data_token.h"
 #include "table.h"
 #include "philosopher.h"
+#include "thread_loop.h"
 
-class Application
+class Application : public Object
 {
 public:
 	Application();
 	virtual ~Application();
 
 	void execute();
+
+	/* slots */
+	void onPhilosopherFinished();
+
 private:
-	const uint32_t NUM_PHILOSOPHERS = 5;
+	bool allPhilosophersFinished();
+
+	bool _appRunning;
+	std::mutex _mtx_cout;
 
 	Table _tableNr44;
-	Philosopher *_p_philosophers;
+	Philosopher *_philosophers;
+	ThreadLoop *_threads;
+
+	const uint32_t NUM_PHILOSOPHERS = 5;
+	const uint32_t MAIN_INTERVAL = 50;
+	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
 };
 
 #endif /* APPLICATION_H_ */
