@@ -34,39 +34,38 @@
 #include <cstdint>
 #include <iostream>
 
-template<typename T>
-class DataToken
+class DataTokenBase
 {
 	friend class Transition;
 
 public:
-	DataToken() : _data(0), _capacity(1), _numToken(1)
+	DataTokenBase() : _data(0), _capacity(1), _numToken(1) {}
+	DataTokenBase(void *data) : _data(data), _capacity(1), _numToken(1) {}
+	DataTokenBase(void *data, uint32_t capacity) : _data(data), _capacity(capacity), _numToken(capacity) {}
+	virtual ~DataTokenBase() {}
+
+protected:
+	void setData(void *data)
 	{
+		_data = data;
 	}
 
-	DataToken(T &p_data) : _data(p_data), _capacity(1), _numToken(1)
+	void setCapacity(uint32_t capacity)
 	{
-	}
-
-	void bind(T &data, uint32_t capacity = 1)
-	{
-		_data = &data;
 		_numToken = _capacity = capacity;
 	}
 
-	T &data() const /* function data() doesn't change this class, but the data may be changed */
+	void *voidData() const
 	{
-		return *_data;
+		return _data;
 	}
-
-	virtual ~DataToken() {}
 
 private:
 	bool isEmpty() const
 	{
 		if(!_data)
 		{
-			std::cout << "Error in DataToken::isEmpty(): Token requested before data has been bound to token" << std::endl;
+			std::cout << "Error in DataTokenBase::isEmpty(): Token requested before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
 		}
 
@@ -76,17 +75,39 @@ private:
 	{
 		if(!_data)
 		{
-			std::cout << "Error in DataToken::isFull(): Token released before data has been bound to token" << std::endl;
+			std::cout << "Error in DataTokenBase::isFull(): Token released before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
 		}
 
 		return _numToken == _capacity;
 	}
 
-	T *_data;
+	void *_data;
 	/* this two members are changed directly by class Transition */
 	uint32_t _capacity;
 	uint32_t _numToken;
+};
+
+template<typename T>
+class DataToken : public DataTokenBase
+{
+public:
+	DataToken() {}
+	DataToken(T &data) : DataTokenBase(&data) {}
+	DataToken(T &data, uint32_t capacity) : DataTokenBase(&data, capacity) {}
+
+	void bind(T &data, uint32_t capacity = 1)
+	{
+		setData(&data);
+		setCapacity(capacity);
+	}
+
+	T &data() const /* function data() doesn't change this class, but the data may be changed */
+	{
+		return *((T *)voidData());
+	}
+
+	virtual ~DataToken() {}
 };
 
 #endif /* SRC_DATA_TOKEN_H_ */
