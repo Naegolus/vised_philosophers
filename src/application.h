@@ -39,8 +39,6 @@
 #include "philosopher.h"
 #include "thread_loop.h"
 
-typedef std::lock_guard<std::mutex> Lock;
-
 class Application : public Object
 {
 public:
@@ -61,7 +59,7 @@ private:
 	bool allPhilosophersFinished();
 
 	bool _appRunning;
-	std::mutex _mtx_cout;
+	std::mutex _mtxCout;
 
 	Table _tableNr44;
 	Philosopher *_philosophers;

@@ -33,6 +33,8 @@
 
 using namespace std;
 
+typedef lock_guard<mutex> Lock;
+
 Application::Application() :
 			_appRunning(false),
 			_tableNr44(NUM_PHILOSOPHERS),
@@ -125,28 +127,28 @@ bool Application::allPhilosophersFinished()
 /* optional begin */
 void Application::onPhilosopherFinishedThinking()
 {
-	Lock lock(_mtx_cout);
+	Lock lock(_mtxCout);
 
 	cout << "<x> done" << endl;
 }
 
 void Application::onPhilosopherStartedThinking()
 {
-	Lock lock(_mtx_cout);
+	Lock lock(_mtxCout);
 }
 
 void Application::onPhilosopherIsHungry()
 {
-	Lock lock(_mtx_cout);
+	Lock lock(_mtxCout);
 }
 
 void Application::onPhilosopherStartedEating()
 {
-	Lock lock(_mtx_cout);
+	Lock lock(_mtxCout);
 }
 
 void Application::onPhilosopherFinishedEating()
 {
-	Lock lock(_mtx_cout);
+	Lock lock(_mtxCout);
 }
 /* optional end */
