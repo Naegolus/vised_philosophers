@@ -34,6 +34,7 @@
 #include "object.h"
 #include "transition.h"
 #include "fork.h"
+#include "fibonacci.h"
 
 typedef DataToken<Fork> ForkToken;
 
@@ -63,10 +64,16 @@ private:
 	{
 		StateHungry = 0,
 		StateEating,
-		StateThinking
+		StateWaitForThinking,
+		StateThinking,
+		StateDone
 	} PhilosopherState;
 
+	const uint32_t NumThinkingCycles = 3;
+
 	PhilosopherState _state;
+	Fibonacci _fib;
+	uint32_t _remainingThinkingCycles;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
