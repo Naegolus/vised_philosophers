@@ -49,8 +49,8 @@ public:
 	signal0<> finishedThinking;
 
 private:
-	ForkToken &_leftFork;
-	ForkToken &_rightFork;
+	ForkToken *_leftFork;
+	ForkToken *_rightFork;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
