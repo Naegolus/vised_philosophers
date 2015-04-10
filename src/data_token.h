@@ -40,23 +40,23 @@ class DataToken
 	friend class Transition;
 
 public:
-	DataToken() : _p_data(0), _capacity(1), _numToken(1)
+	DataToken() : _data(0), _capacity(1), _numToken(1)
 	{
 	}
 
-	DataToken(T *p_data) : _p_data(p_data), _capacity(1), _numToken(1)
+	DataToken(T &p_data) : _data(p_data), _capacity(1), _numToken(1)
 	{
 	}
 
-	void bind(T *p_data, uint32_t capacity = 1)
+	void bind(T &data, uint32_t capacity = 1)
 	{
-		_p_data = p_data;
+		_data = data;
 		_numToken = _capacity = capacity;
 	}
 
-	T *data() const /* function data() doesn't change this class, but the data may be changed */
+	T &data() const /* function data() doesn't change this class, but the data may be changed */
 	{
-		return _p_data;
+		return _data;
 	}
 
 	virtual ~DataToken() {}
@@ -64,7 +64,7 @@ public:
 private:
 	bool isEmpty() const
 	{
-		if(!_p_data)
+		if(!_data)
 		{
 			std::cout << "Error in DataToken::isEmpty(): Token requested before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
@@ -74,7 +74,7 @@ private:
 	}
 	bool isFull() const
 	{
-		if(!_p_data)
+		if(!_data)
 		{
 			std::cout << "Error in DataToken::isFull(): Token released before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
@@ -83,7 +83,7 @@ private:
 		return _numToken == _capacity;
 	}
 
-	T *_p_data;
+	T &_data;
 	/* this two members are changed directly by class Transition */
 	uint32_t _capacity;
 	uint32_t _numToken;
