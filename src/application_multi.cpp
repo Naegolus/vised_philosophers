@@ -37,20 +37,12 @@ typedef lock_guard<mutex> Lock;
 
 Application::Application() :
 			_appRunning(true),
-			_tableNr44(NUM_PHILOSOPHERS),
-			_philosophers(0),
-			_threads(0)
+			_tableNr44(NUM_PHILOSOPHERS)
 {
-	_philosophers = new Philosopher[NUM_PHILOSOPHERS];
-	_threads = new ThreadLoop[NUM_PHILOSOPHERS];
-	_forkToken = new ForkToken[NUM_PHILOSOPHERS];
 }
 
 Application::~Application()
 {
-	delete[] _philosophers;
-	delete[] _threads;
-	delete[] _forkToken;
 }
 
 void Application::execute()

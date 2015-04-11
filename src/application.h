@@ -60,12 +60,13 @@ private:
 	bool _appRunning;
 	std::mutex _mtxCout;
 
-	Table _tableNr44;
-	Philosopher *_philosophers;
-	ThreadLoop *_threads;
-	ForkToken *_forkToken;
+	static const uint32_t NUM_PHILOSOPHERS = 5;
 
-	const uint32_t NUM_PHILOSOPHERS = 5;
+	Table _tableNr44;
+	Philosopher _philosophers[NUM_PHILOSOPHERS];
+	ThreadLoop _threads[NUM_PHILOSOPHERS];
+	ForkToken _forkToken[NUM_PHILOSOPHERS];
+
 	const uint32_t MAIN_INTERVAL = 50;
 	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
 };
