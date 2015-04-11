@@ -64,7 +64,7 @@ int Application::execute(int argc, char *argv[])
 
 		if(2 > numObjects)
 		{
-			cerr << "Error: At least two philosophers must be dining." << endl;
+			cerr << "Error: At least two philosophers must be dining." << endl << endl;
 			return 1;
 		}
 		createObjects(numObjects);
