@@ -71,7 +71,8 @@ private:
 
 	typedef enum
 	{
-		StateHungry = 0,
+		StateStartup = 0,
+		StateHungry,
 		StateEating,
 		StateWaitForThinking,
 		StateThinking,

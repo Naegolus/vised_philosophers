@@ -33,7 +33,7 @@
 Philosopher::Philosopher() :
 			_leftFork(0),
 			_rightFork(0),
-			_state(StateHungry),
+			_state(StateStartup),
 			_remainingThinkingCycles(NumThinkingCycles)
 {
 }
@@ -67,34 +67,32 @@ void Philosopher::doStuff()
 {
 	switch(_state)
 	{
+	case StateStartup:
+		_state = StateHungry;
+		isHungry();
+		break;
 	case StateHungry:
 		if(acquireForks.fired())
-		{
 			_state = StateEating;
-			startedEating();
-		}
 		break;
 	case StateEating:
 
+		startedEating();
 		_fib.calc(2);
 
 		_state = StateWaitForThinking;
 		break;
 	case StateWaitForThinking:
 		if(releaseForks.fired())
-		{
 			_state = StateThinking;
-			startedThinking();
-		}
 		break;
 	case StateThinking:
 
+		startedThinking();
 		_fib.calc(3);
 
-		if(_remainingThinkingCycles)
+		if(--_remainingThinkingCycles)
 		{
-			--_remainingThinkingCycles;
-
 			_state = StateHungry;
 			isHungry();
 		}else{
