@@ -31,6 +31,7 @@
 #include "philosopher.h"
 
 Philosopher::Philosopher() :
+			_id(0),
 			_leftFork(0),
 			_rightFork(0),
 			_state(StateStartup),
@@ -40,6 +41,16 @@ Philosopher::Philosopher() :
 
 Philosopher::~Philosopher()
 {
+}
+
+void Philosopher::setId(uint32_t id)
+{
+	_id = id;
+}
+
+uint32_t Philosopher::id() const
+{
+	return _id;
 }
 
 void Philosopher::setHisForks(Fork *leftFork, Fork *rightFork)

@@ -44,6 +44,9 @@ public:
 	Philosopher();
 	virtual ~Philosopher();
 
+	void setId(uint32_t id);
+	uint32_t id() const;
+
 	/* using Philosopher singlethreaded -> ForkToken are internal and distributed */
 	void setHisForks(Fork *leftFork, Fork *rightFork);
 
@@ -60,6 +63,8 @@ public:
 	signal0<> finishedThinking;
 
 private:
+	uint32_t _id;
+
 	Fork *_leftFork;
 	Fork *_rightFork;
 
