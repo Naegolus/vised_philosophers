@@ -28,7 +28,11 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
+#include <iostream>
+#include <stdlib.h>
 #include "application.h"
+
+using namespace std;
 
 Application::Application() :
 			_appRunning(false),
@@ -40,8 +44,101 @@ Application::Application() :
 
 Application::~Application()
 {
+	delete[] _philosophers;
 }
 
 void Application::execute(int argc, char *argv[])
 {
+	chrono::milliseconds interval(MAIN_INTERVAL);
+
+	cout << endl;
+	cout << "Executing multi threaded Application" << endl << endl;
+
+	if(1 < argc)
+		createObjects(atoi(argv[1]));
+	else
+		createObjects(5);
+
+	connectObjects();
+
+	while(!allPhilosophersFinished())
+	{
+		for(uint32_t i = 0; i < _numPhilosophers; ++i)
+			_philosophers[i].doStuff();
+
+		this_thread::sleep_for(interval);
+	}
+
+	cout << endl << "Application finished" << endl;
+	cout << endl;
 }
+
+void Application::createObjects(uint32_t count)
+{
+	_numPhilosophers = count;
+
+	cout << "  Creating " << count << " philosophers." << endl << endl;
+
+	_tableNr44.createForks(count);
+	_philosophers = new Philosopher[count];
+}
+
+void Application::connectObjects()
+{
+	uint32_t n;
+	Philosopher *phil = _philosophers;
+
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
+	{
+		/* bind fork token to philosophers */
+		n = 0 != i ? i - 1 : _numPhilosophers - 1;
+		phil->setId(i);
+		phil->setHisForks(_tableNr44.fork(i), _tableNr44.fork(n));
+
+		/* optional begin */
+			phil->startedEating.connect(this, &Application::onPhilosopherStartedEating);
+			phil->startedThinking.connect(this, &Application::onPhilosopherStartedThinking);
+			phil->isHungry.connect(this, &Application::onPhilosopherIsHungry);
+			phil->finishedThinking.connect(this, &Application::onPhilosopherFinishedThinking);
+		/* optional end */
+
+		++phil;
+	}
+}
+
+bool Application::allPhilosophersFinished()
+{
+	Philosopher *phil = _philosophers;
+
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
+	{
+		if(!phil->isFinished())
+			return false;
+
+		++phil;
+	}
+
+	return true;
+}
+
+/* optional begin */
+void Application::onPhilosopherStartedEating(Philosopher *p)
+{
+	cout << "  " << p->id() << " started eating" << endl;
+}
+
+void Application::onPhilosopherStartedThinking(Philosopher *p)
+{
+	cout << "  " << p->id() << " started thinking. Remaining thoughts: " << p->remainingThinkingCycles() << endl;
+}
+
+void Application::onPhilosopherIsHungry(Philosopher *p)
+{
+	cout << "  " << p->id() << " is hungry" << endl;
+}
+
+void Application::onPhilosopherFinishedThinking(Philosopher *p)
+{
+	cout << "  " << p->id() << " finished thinking" << endl;
+}
+/* optional end */
