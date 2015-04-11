@@ -57,10 +57,13 @@ public:
 	bool isFinished();
 
 	/* signals */
-	signal0<> startedEating;
-	signal0<> startedThinking;
-	signal0<> isHungry;
-	signal0<> finishedThinking;
+	signal0<> finished; /* because of thread. bad: better map in application */
+	/* begin optional */
+	  signal1<Philosopher *> startedEating;
+	  signal1<Philosopher *> startedThinking;
+	  signal1<Philosopher *> isHungry;
+	  signal1<Philosopher *> finishedThinking;
+	/* end optional */
 
 private:
 	uint32_t _id;

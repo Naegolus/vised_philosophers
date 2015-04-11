@@ -86,7 +86,7 @@ void Application::connectObjects()
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 	{
 		thread->ticked.connect(phil, &Philosopher::doStuff);
-		phil->finishedThinking.connect(thread, &ThreadLoop::requestFinish);
+		phil->finished.connect(thread, &ThreadLoop::requestFinish);
 
 		/* bind fork token to philosophers */
 		if(0 != i)
@@ -94,6 +94,7 @@ void Application::connectObjects()
 		else
 			tokenRight = &token[NUM_PHILOSOPHERS - 1];
 
+		phil->setId(i);
 		phil->setHisForks(token, tokenRight);
 
 		/* optional begin */
@@ -125,31 +126,31 @@ bool Application::allPhilosophersFinished()
 }
 
 /* optional begin */
-void Application::onPhilosopherStartedEating()
+void Application::onPhilosopherStartedEating(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> started eating" << endl;
+	cout << p->id() << " started eating" << endl;
 }
 
-void Application::onPhilosopherStartedThinking()
+void Application::onPhilosopherStartedThinking(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> started thinking. Remaining thoughts: " << endl;
+	cout << p->id() << " started thinking. Remaining thoughts: " << endl;
 }
 
-void Application::onPhilosopherIsHungry()
+void Application::onPhilosopherIsHungry(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> is hungry" << endl;
+	cout << p->id() << " is hungry" << endl;
 }
 
-void Application::onPhilosopherFinishedThinking()
+void Application::onPhilosopherFinishedThinking(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> finished thinking" << endl;
+	cout << p->id() << " finished thinking" << endl;
 }
 /* optional end */

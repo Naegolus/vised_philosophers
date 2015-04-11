@@ -80,7 +80,7 @@ void Philosopher::doStuff()
 	{
 	case StateStartup:
 		_state = StateHungry;
-		isHungry();
+		isHungry(this);
 		break;
 	case StateHungry:
 		if(acquireForks.fired())
@@ -88,7 +88,7 @@ void Philosopher::doStuff()
 		break;
 	case StateEating:
 
-		startedEating();
+		startedEating(this);
 		_fib.calc(2);
 
 		_state = StateWaitForThinking;
@@ -99,16 +99,17 @@ void Philosopher::doStuff()
 		break;
 	case StateThinking:
 
-		startedThinking();
+		startedThinking(this);
 		_fib.calc(3);
 
 		if(--_remainingThinkingCycles)
 		{
 			_state = StateHungry;
-			isHungry();
+			isHungry(this);
 		}else{
 			_state = StateDone;
-			finishedThinking();
+			finished();
+			finishedThinking(this);
 		}
 		break;
 	case StateDone:
