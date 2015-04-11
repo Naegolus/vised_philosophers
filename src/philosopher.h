@@ -77,10 +77,15 @@ private:
 	Transition acquireForks;
 	Transition releaseForks;
 
+	/* for deadlock test only */
+	Transition acquireLeftFork;
+	Transition acquireRightFork;
+
 	typedef enum
 	{
 		StateStartup = 0,
 		StateHungry,
+		StateAcquireRightFork, /* for deadlock test only */
 		StateEating,
 		StateWaitForThinking,
 		StateThinking,

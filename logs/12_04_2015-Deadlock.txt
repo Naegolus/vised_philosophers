@@ -1,0 +1,10 @@
+$ ./obj/multi
+
+Executing multi threaded Application
+
+0 is hungry
+1 is hungry
+2 is hungry
+3 is hungry
+4 is hungry
+^C

@@ -62,13 +62,19 @@ void Philosopher::setHisForks(Fork *leftFork, Fork *rightFork)
 	setHisForks(&_leftForkToken, &_rightForkToken);
 }
 
+#define PRODUCE_DEADLOCK 0
 void Philosopher::setHisForks(ForkToken *leftFork, ForkToken *rightFork)
 {
 	_leftFork = leftFork->data();
 	_rightFork = rightFork->data();
 
+#if not(PRODUCE_DEADLOCK)
 	acquireForks.addInput(leftFork);
 	acquireForks.addInput(rightFork);
+#else
+	acquireLeftFork.addInput(leftFork);
+	acquireRightFork.addInput(rightFork);
+#endif
 
 	releaseForks.addOutput(leftFork);
 	releaseForks.addOutput(rightFork);
@@ -83,7 +89,19 @@ void Philosopher::doStuff()
 		isHungry(this);
 		break;
 	case StateHungry:
+#if not(PRODUCE_DEADLOCK)
 		if(acquireForks.fired())
+			_state = StateEating;
+#else
+		if(acquireLeftFork.fired())
+			_state = StateAcquireRightFork;
+#endif
+		break;
+	case StateAcquireRightFork:
+
+		_fib.calc(5); /* for deadlock test only */
+
+		if(acquireRightFork.fired())
 			_state = StateEating;
 		break;
 	case StateEating:
