@@ -79,7 +79,6 @@ void Application::execute(int argc, char *argv[])
 
 	cout << endl << "Application finished" << endl;
 	cout << endl;
-
 }
 
 void Application::createObjects(uint32_t count)
