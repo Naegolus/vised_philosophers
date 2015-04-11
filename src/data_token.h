@@ -87,8 +87,8 @@ private:
 	}
 
 	void *_data;
-	/* this two members are changed directly by class Transition */
 	uint32_t _capacity;
+	/* this member is changed directly by class Transition */
 	uint32_t _numToken;
 };
 
