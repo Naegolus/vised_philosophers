@@ -29,6 +29,7 @@
  ----------------------------------------------------------------------------- */
 
 #include <iostream>
+#include <stdlib.h>
 #include "application.h"
 
 using namespace std;
@@ -37,38 +38,60 @@ typedef lock_guard<mutex> Lock;
 
 Application::Application() :
 			_appRunning(true),
-			_tableNr44(NUM_PHILOSOPHERS)
+			_philosophers(0),
+			_threads(0),
+			_forkToken(0)
 {
 }
 
 Application::~Application()
 {
+	delete[] _philosophers;
+	delete[] _threads;
+	delete[] _forkToken;
 }
 
-void Application::execute()
+void Application::execute(int argc, char *argv[])
 {
 	chrono::milliseconds interval(MAIN_INTERVAL);
 
 	cout << endl;
 	cout << "Executing multi threaded Application" << endl << endl;
 
+	if(1 < argc)
+		createObjects(atoi(argv[1]));
+	else
+		createObjects(5);
+
 	connectObjects();
 
 	/* start threads as soon as everything is connected */
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
 		_threads[i].start(MAIN_INTERVAL);
 
 	while(!allPhilosophersFinished())
 		this_thread::sleep_for(interval);
 
 	if(raceConditionDetected())
-		cout << endl << "Result: Race condition detected!" << endl;
+		cout << endl << "  Result: Race condition detected!" << endl;
 	else
-		cout << endl << "Result: No race condition detected." << endl;
+		cout << endl << "  Result: No race condition detected." << endl;
 
 	cout << endl << "Application finished" << endl;
 	cout << endl;
 
+}
+
+void Application::createObjects(uint32_t count)
+{
+	_numPhilosophers = count;
+
+	cout << "  Creating " << count << " philosophers." << endl << endl;
+
+	_tableNr44.createForks(count);
+	_philosophers = new Philosopher[count];
+	_threads = new ThreadLoop[count];
+	_forkToken = new ForkToken[count];
 }
 
 #define PRODUCE_RACE_CONDITION 0
@@ -85,14 +108,14 @@ void Application::connectObjects()
 		/* bind forks to token
 		 * Must be done before executing function setHisForks()
 		 * because of tokenRight -> seg fault */
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
 	{
 		token->bind(_tableNr44.fork(i));
 		++token;
 	}
 
 	token = _forkToken;
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
 	{
 		thread->ticked.connect(phil, &Philosopher::doStuff);
 		phil->finished.connect(thread, &ThreadLoop::requestFinish);
@@ -105,7 +128,7 @@ void Application::connectObjects()
 			tokenRight = token - 1;
 #endif
 		}else{
-			n = NUM_PHILOSOPHERS - 1;
+			n = _numPhilosophers - 1;
 #if not(PRODUCE_RACE_CONDITION)
 			tokenRight = &token[n];
 #endif
@@ -135,7 +158,7 @@ bool Application::allPhilosophersFinished()
 {
 	ThreadLoop *thread = _threads;
 
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
 	{
 		if(!thread->isFinished())
 			return false;
@@ -148,7 +171,7 @@ bool Application::allPhilosophersFinished()
 
 bool Application::raceConditionDetected()
 {
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	for(uint32_t i = 0; i < _numPhilosophers; ++i)
 	{
 		if(_tableNr44.fork(i)->dirtyCount())
 			return true;
@@ -162,27 +185,27 @@ void Application::onPhilosopherStartedEating(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << p->id() << " started eating" << endl;
+	cout << "  " << p->id() << " started eating" << endl;
 }
 
 void Application::onPhilosopherStartedThinking(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << p->id() << " started thinking. Remaining thoughts: " << endl;
+	cout << "  " << p->id() << " started thinking. Remaining thoughts: " << endl;
 }
 
 void Application::onPhilosopherIsHungry(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << p->id() << " is hungry" << endl;
+	cout << "  " << p->id() << " is hungry" << endl;
 }
 
 void Application::onPhilosopherFinishedThinking(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << p->id() << " finished thinking" << endl;
+	cout << "  " << p->id() << " finished thinking" << endl;
 }
 /* optional end */

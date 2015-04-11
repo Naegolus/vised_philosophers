@@ -30,14 +30,19 @@
 
 #include "table.h"
 
-Table::Table(uint32_t numForks)
+Table::Table() :
+		_forks(0)
 {
-	_forks = new Fork[numForks];
 }
 
 Table::~Table()
 {
 	delete[] _forks;
+}
+
+void Table::createForks(uint32_t numForks)
+{
+	_forks = new Fork[numForks];
 }
 
 Fork *Table::fork(uint32_t idx) const

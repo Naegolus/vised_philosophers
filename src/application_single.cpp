@@ -32,7 +32,9 @@
 
 Application::Application() :
 			_appRunning(false),
-			_tableNr44(NUM_PHILOSOPHERS)
+			_philosophers(0),
+			_threads(0),
+			_forkToken(0)
 {
 }
 
@@ -40,6 +42,6 @@ Application::~Application()
 {
 }
 
-void Application::execute()
+void Application::execute(int argc, char *argv[])
 {
 }

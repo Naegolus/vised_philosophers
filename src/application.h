@@ -45,7 +45,8 @@ public:
 	Application();
 	virtual ~Application();
 
-	void execute();
+	void execute(int argc, char *argv[]);
+	void createObjects(uint32_t count);
 	void connectObjects();
 
 	/* slots */
@@ -61,12 +62,12 @@ private:
 	bool _appRunning;
 	std::mutex _mtxCout;
 
-	static const uint32_t NUM_PHILOSOPHERS = 5;
+	uint32_t _numPhilosophers;
 
 	Table _tableNr44;
-	Philosopher _philosophers[NUM_PHILOSOPHERS];
-	ThreadLoop _threads[NUM_PHILOSOPHERS];
-	ForkToken _forkToken[NUM_PHILOSOPHERS];
+	Philosopher *_philosophers;
+	ThreadLoop *_threads;
+	ForkToken *_forkToken;
 
 	const uint32_t MAIN_INTERVAL = 50;
 	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;

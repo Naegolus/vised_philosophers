@@ -38,14 +38,13 @@
 class Table : public Object
 {
 public:
-	Table(uint32_t numForks);
+	Table();
 	virtual ~Table();
 
+	void createForks(uint32_t numForks);
 	Fork *fork(uint32_t idx) const;
 
 private:
-	Table() : _forks(0) {}
-
 	Fork *_forks;
 };
 

@@ -32,9 +32,9 @@
 
 Application app;
 
-int main()
+int main(int argc, char *argv[])
 {
-	app.execute();
+	app.execute(argc, argv);
 
 	return 0;
 }
