@@ -57,6 +57,7 @@ void Application::execute()
 {
 	chrono::milliseconds interval(MAIN_INTERVAL);
 
+	cout << endl;
 	cout << "Executing multi threaded Application" << endl << endl;
 
 	connectObjects();
@@ -69,6 +70,7 @@ void Application::execute()
 		this_thread::sleep_for(interval);
 
 	cout << endl << "Application finished" << endl;
+	cout << endl;
 
 }
 
