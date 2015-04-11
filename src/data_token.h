@@ -69,7 +69,7 @@ private:
 	{
 		if(!_data)
 		{
-			std::cout << "Error in DataTokenBase::isEmpty(): Token requested before data has been bound to token" << std::endl;
+			std::cerr << "Error in DataTokenBase::isEmpty(): Token requested before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
 		}
 
@@ -79,7 +79,7 @@ private:
 	{
 		if(!_data)
 		{
-			std::cout << "Error in DataTokenBase::isFull(): Token released before data has been bound to token" << std::endl;
+			std::cerr << "Error in DataTokenBase::isFull(): Token released before data has been bound to token" << std::endl;
 			return true; /* we are lying, but no one should use a null pointer */
 		}
 
