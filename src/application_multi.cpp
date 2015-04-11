@@ -191,7 +191,7 @@ void Application::onPhilosopherStartedThinking(Philosopher *p)
 {
 	Lock lock(_mtxCout);
 
-	cout << "  " << p->id() << " started thinking. Remaining thoughts: " << endl;
+	cout << "  " << p->id() << " started thinking. Remaining thoughts: " << p->remainingThinkingCycles() << endl;
 }
 
 void Application::onPhilosopherIsHungry(Philosopher *p)

@@ -145,6 +145,11 @@ void Philosopher::doStuff()
 	}
 }
 
+uint32_t Philosopher::remainingThinkingCycles() const
+{
+	return _remainingThinkingCycles;
+}
+
 bool Philosopher::isFinished()
 {
 	return StateDone == _state;

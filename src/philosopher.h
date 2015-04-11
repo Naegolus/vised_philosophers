@@ -54,6 +54,7 @@ public:
 	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
 
 	void doStuff();
+	uint32_t remainingThinkingCycles() const;
 	bool isFinished();
 
 	/* signals */
