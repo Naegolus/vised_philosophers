@@ -42,6 +42,15 @@ Philosopher::~Philosopher()
 {
 }
 
+void Philosopher::setHisForks(Fork *leftFork, Fork *rightFork)
+{
+	/* bind forks to internal token -> access to resource is always granted */
+	_leftForkToken.bind(leftFork);
+	_rightForkToken.bind(rightFork);
+
+	setHisForks(&_leftForkToken, &_rightForkToken);
+}
+
 void Philosopher::setHisForks(ForkToken *leftFork, ForkToken *rightFork)
 {
 	_leftFork = leftFork->data();
@@ -96,4 +105,9 @@ void Philosopher::doStuff()
 	case StateDone:
 		break;
 	}
+}
+
+bool Philosopher::isFinished()
+{
+	return StateDone == _state;
 }

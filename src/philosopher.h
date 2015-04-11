@@ -44,8 +44,14 @@ public:
 	Philosopher();
 	virtual ~Philosopher();
 
+	/* using Philosopher singlethreaded -> ForkToken are internal and distributed */
+	void setHisForks(Fork *leftFork, Fork *rightFork);
+
+	/* using Philosopher multithreaded -> ForkToken are external and centralized */
 	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
+
 	void doStuff();
+	bool isFinished();
 
 	/* signals */
 	signal0<> startedEating;
@@ -56,6 +62,9 @@ public:
 private:
 	Fork *_leftFork;
 	Fork *_rightFork;
+
+	ForkToken _leftForkToken;
+	ForkToken _rightForkToken;
 
 	Transition acquireForks;
 	Transition releaseForks;
