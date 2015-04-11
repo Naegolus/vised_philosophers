@@ -34,7 +34,6 @@ using namespace std;
 
 typedef lock_guard<mutex> Lock;
 typedef list<DataTokenBase *>::const_iterator ConstIter;
-typedef list<DataTokenBase *>::iterator Iter;
 
 mutex Transition::_mtxFire;
 
@@ -56,7 +55,7 @@ void Transition::addOutput(DataTokenBase *token)
 	outputs.push_back(token);
 }
 
-bool Transition::fired()
+bool Transition::fired() const
 {
 	Lock lock(_mtxFire);
 
@@ -73,9 +72,9 @@ bool Transition::fired()
 	}
 
 	/* all conditions met -> fire */
-	for(Iter token = inputs.begin(); token != inputs.end(); ++token)
+	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
 		--(*token)->_numToken;
-	for(Iter token = outputs.begin(); token != outputs.end(); ++token)
+	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
 		++(*token)->_numToken;
 
 	return true;

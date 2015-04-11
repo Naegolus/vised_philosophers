@@ -44,7 +44,7 @@ public:
 	void addInput(DataTokenBase *token);
 	void addOutput(DataTokenBase *token);
 
-	bool fired();
+	bool fired() const;
 
 private:
 	static std::mutex _mtxFire;
