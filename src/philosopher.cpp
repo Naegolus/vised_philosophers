@@ -108,8 +108,8 @@ void Philosopher::doStuff()
 
 		startedEating(this);
 		_leftFork->makeDirty();
-		_rightFork->makeDirty();
 		_leftFork->makeClean();
+		_rightFork->makeDirty();
 		_rightFork->makeClean();
 
 		_state = StateWaitForThinking;

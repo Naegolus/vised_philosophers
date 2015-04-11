@@ -71,7 +71,7 @@ void Application::execute()
 
 }
 
-#define PRODUCE_RACE_CONDITION 1
+#define PRODUCE_RACE_CONDITION 0
 void Application::connectObjects()
 {
 	uint32_t n;
