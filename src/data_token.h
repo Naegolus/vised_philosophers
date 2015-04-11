@@ -34,6 +34,10 @@
 #include <cstdint>
 #include <iostream>
 
+/* Info: Token are only necessary if multiple threads
+ *       need access to common resources. The class
+ *       Transition manages the access to the resources */
+
 class DataTokenBase
 {
 	friend class Transition;
