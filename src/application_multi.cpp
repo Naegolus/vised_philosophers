@@ -158,5 +158,4 @@ void Application::onPhilosopherFinishedThinking()
 
 	cout << "<x> finished thinking" << endl;
 }
-
 /* optional end */
