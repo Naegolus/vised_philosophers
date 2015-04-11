@@ -61,7 +61,7 @@ void Application::execute()
 
 	connectObjects();
 
-	/* start thread as soon as everything is connected */
+	/* start threads as soon as everything is connected */
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 		_threads[i].start(MAIN_INTERVAL);
 
@@ -87,7 +87,9 @@ void Application::connectObjects()
 	ForkToken *token = _forkToken;
 	ForkToken *tokenRight;
 
-		/* bind forks to token */
+		/* bind forks to token
+		 * Must be done before executing function setHisForks()
+		 * because of tokenRight -> seg fault */
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 	{
 		token->bind(_tableNr44.fork(i));
@@ -148,7 +150,7 @@ void Application::onPhilosopherStartedThinking()
 {
 	Lock lock(_mtxCout);
 
-	cout << "<x> started thinking" << endl;
+	cout << "<x> started thinking. Remaining thoughts: " << endl;
 }
 
 void Application::onPhilosopherIsHungry()
