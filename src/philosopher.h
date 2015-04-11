@@ -74,12 +74,12 @@ private:
 	ForkToken _leftForkToken;
 	ForkToken _rightForkToken;
 
-	Transition acquireForks;
-	Transition releaseForks;
+	Transition _acquireForks;
+	Transition _releaseForks;
 
 	/* for deadlock test only */
-	Transition acquireLeftFork;
-	Transition acquireRightFork;
+	Transition _acquireLeftFork;
+	Transition _acquireRightFork;
 
 	typedef enum
 	{

@@ -69,15 +69,15 @@ void Philosopher::setHisForks(ForkToken *leftFork, ForkToken *rightFork)
 	_rightFork = rightFork->data();
 
 #if not(PRODUCE_DEADLOCK)
-	acquireForks.addInput(leftFork);
-	acquireForks.addInput(rightFork);
+	_acquireForks.addInput(leftFork);
+	_acquireForks.addInput(rightFork);
 #else
-	acquireLeftFork.addInput(leftFork);
-	acquireRightFork.addInput(rightFork);
+	_acquireLeftFork.addInput(leftFork);
+	_acquireRightFork.addInput(rightFork);
 #endif
 
-	releaseForks.addOutput(leftFork);
-	releaseForks.addOutput(rightFork);
+	_releaseForks.addOutput(leftFork);
+	_releaseForks.addOutput(rightFork);
 }
 
 void Philosopher::doStuff()
@@ -90,10 +90,10 @@ void Philosopher::doStuff()
 		break;
 	case StateHungry:
 #if not(PRODUCE_DEADLOCK)
-		if(acquireForks.fired())
+		if(_acquireForks.fired())
 			_state = StateEating;
 #else
-		if(acquireLeftFork.fired())
+		if(_acquireLeftFork.fired())
 			_state = StateAcquireRightFork;
 #endif
 		break;
@@ -101,7 +101,7 @@ void Philosopher::doStuff()
 
 		_fib.calc(5); /* for deadlock test only */
 
-		if(acquireRightFork.fired())
+		if(_acquireRightFork.fired())
 			_state = StateEating;
 		break;
 	case StateEating:
@@ -112,7 +112,7 @@ void Philosopher::doStuff()
 		_state = StateWaitForThinking;
 		break;
 	case StateWaitForThinking:
-		if(releaseForks.fired())
+		if(_releaseForks.fired())
 			_state = StateThinking;
 		break;
 	case StateThinking:
