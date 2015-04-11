@@ -1,0 +1,53 @@
+$ ./speedup.sh 2
+
+Executing single
+Time single: 3.520
+Executing multi
+Time multi: 3.710
+
+Speedup: .94
+
+$ ./speedup.sh 3
+
+Executing single
+Time single: 4.626
+Executing multi
+Time multi: 4.959
+
+Speedup: .93
+
+$ ./speedup.sh 4
+
+Executing single
+Time single: 5.826
+Executing multi
+Time multi: 3.359
+
+Speedup: 1.73
+
+$ ./speedup.sh 5
+
+Executing single
+Time single: 7.159
+Executing multi
+Time multi: 4.810
+
+Speedup: 1.48
+
+$ ./speedup.sh 6
+
+Executing single
+Time single: 8.579
+Executing multi
+Time multi: 3.458
+
+Speedup: 2.48
+
+$ ./speedup.sh 10
+
+Executing single
+Time single: 13.150
+Executing multi
+Time multi: 5.461
+
+Speedup: 2.40
