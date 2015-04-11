@@ -65,16 +65,8 @@ void Application::execute()
 	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
 		_threads[i].start(MAIN_INTERVAL);
 
-	while(_appRunning)
-	{
+	while(!allPhilosophersFinished())
 		this_thread::sleep_for(interval);
-
-		if(allPhilosophersFinished())
-			_appRunning = false;
-	}
-
-	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
-		_threads[i].shutdown(THREAD_SHUTDOWN_TIMEOUT_MS);
 
 	cout << endl << "Application finished" << endl;
 
