@@ -107,9 +107,16 @@ void Philosopher::doStuff()
 	case StateEating:
 
 		startedEating(this);
+
+		/* read something from data container */
 		_leftFork->makeDirty();
-		_leftFork->makeClean();
 		_rightFork->makeDirty();
+
+		/* calculate something */
+		_fib.calc(38);
+
+		/* write something to data container */
+		_leftFork->makeClean();
 		_rightFork->makeClean();
 
 		_state = StateWaitForThinking;
@@ -121,7 +128,7 @@ void Philosopher::doStuff()
 	case StateThinking:
 
 		startedThinking(this);
-		_fib.calc(3);
+		_fib.calc(32);
 
 		if(--_remainingThinkingCycles)
 		{
