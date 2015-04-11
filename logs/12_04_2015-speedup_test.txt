@@ -1,53 +1,62 @@
 $ ./speedup.sh 2
 
 Executing single
-Time single: 3.520
+Time single: 7.654
 Executing multi
-Time multi: 3.710
+Time multi: 6.608
 
-Speedup: .94
+Speedup: 1.15
 
 $ ./speedup.sh 3
 
 Executing single
-Time single: 4.626
+Time single: 10.786
 Executing multi
-Time multi: 4.959
+Time multi: 9.906
 
-Speedup: .93
+Speedup: 1.08
 
 $ ./speedup.sh 4
 
 Executing single
-Time single: 5.826
+Time single: 14.745
 Executing multi
-Time multi: 3.359
+Time multi: 6.714
 
-Speedup: 1.73
+Speedup: 2.19
 
 $ ./speedup.sh 5
 
 Executing single
-Time single: 7.159
+Time single: 16.974
 Executing multi
-Time multi: 4.810
+Time multi: 8.709
 
-Speedup: 1.48
+Speedup: 1.94
 
 $ ./speedup.sh 6
 
 Executing single
-Time single: 8.579
+Time single: 21.386
 Executing multi
-Time multi: 3.458
+Time multi: 7.469
 
-Speedup: 2.48
+Speedup: 2.86
+
+$ ./speedup.sh 8
+
+Executing single
+Time single: 26.251
+Executing multi
+Time multi: 9.351
+
+Speedup: 2.80
 
 $ ./speedup.sh 10
 
 Executing single
-Time single: 13.150
+Time single: 34.743
 Executing multi
-Time multi: 5.461
+Time multi: 10.946
 
-Speedup: 2.40
+Speedup: 3.17

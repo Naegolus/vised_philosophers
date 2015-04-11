@@ -113,7 +113,7 @@ void Philosopher::doStuff()
 		_rightFork->makeDirty();
 
 		/* calculate something */
-		_fib.calc(38);
+		_fib.calc(40);
 
 		/* write something to data container */
 		_leftFork->makeClean();
@@ -128,7 +128,6 @@ void Philosopher::doStuff()
 	case StateThinking:
 
 		startedThinking(this);
-		_fib.calc(32);
 
 		if(--_remainingThinkingCycles)
 		{

@@ -69,7 +69,8 @@ private:
 	ThreadLoop *_threads;
 	ForkToken *_forkToken;
 
-	const uint32_t MAIN_INTERVAL = 50;
+	const uint32_t MAIN_INTERVAL = 1;
+	const uint32_t CHECK_INTERVAL = 100;
 	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
 };
 

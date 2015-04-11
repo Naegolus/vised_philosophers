@@ -49,7 +49,7 @@ Application::~Application()
 
 int Application::execute(int argc, char *argv[])
 {
-	chrono::milliseconds interval(MAIN_INTERVAL);
+	chrono::milliseconds interval(CHECK_INTERVAL);
 
 	cout << endl;
 	cout << "Executing multi threaded Application" << endl << endl;
