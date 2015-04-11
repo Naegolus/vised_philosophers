@@ -56,6 +56,7 @@ public:
 
 private:
 	bool allPhilosophersFinished();
+	bool raceConditionDetected();
 
 	bool _appRunning;
 	std::mutex _mtxCout;

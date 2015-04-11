@@ -40,7 +40,12 @@ Fork::~Fork()
 
 void Fork::makeDirty()
 {
-	++_dirtyCount;
+	uint32_t dirtyCount = _dirtyCount;
+
+	_fib.calc(16);
+	++dirtyCount;
+
+	_dirtyCount = dirtyCount;
 }
 
 void Fork::makeClean()

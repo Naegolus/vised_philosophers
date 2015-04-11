@@ -33,6 +33,7 @@
 
 #include <cstdint>
 #include "object.h"
+#include "fibonacci.h"
 
 class Fork : public Object
 {
@@ -46,6 +47,8 @@ public:
 	uint32_t dirtyCount() const;
 
 private:
+	Fibonacci _fib;
+
 	uint32_t _dirtyCount;
 };
 

@@ -107,7 +107,10 @@ void Philosopher::doStuff()
 	case StateEating:
 
 		startedEating(this);
-		_fib.calc(2);
+		_leftFork->makeDirty();
+		_rightFork->makeDirty();
+		_leftFork->makeClean();
+		_rightFork->makeClean();
 
 		_state = StateWaitForThinking;
 		break;

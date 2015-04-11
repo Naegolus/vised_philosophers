@@ -61,17 +61,26 @@ void Application::execute()
 	while(!allPhilosophersFinished())
 		this_thread::sleep_for(interval);
 
+	if(raceConditionDetected())
+		cout << endl << "Result: Race condition detected!" << endl;
+	else
+		cout << endl << "Result: No race condition detected." << endl;
+
 	cout << endl << "Application finished" << endl;
 	cout << endl;
 
 }
 
+#define PRODUCE_RACE_CONDITION 1
 void Application::connectObjects()
 {
+	uint32_t n;
 	Philosopher *phil = _philosophers;
 	ThreadLoop *thread = _threads;
 	ForkToken *token = _forkToken;
+#if not(PRODUCE_RACE_CONDITION)
 	ForkToken *tokenRight;
+#endif
 
 		/* bind forks to token
 		 * Must be done before executing function setHisForks()
@@ -90,12 +99,24 @@ void Application::connectObjects()
 
 		/* bind fork token to philosophers */
 		if(0 != i)
+		{
+			n = i - 1;
+#if not(PRODUCE_RACE_CONDITION)
 			tokenRight = token - 1;
-		else
-			tokenRight = &token[NUM_PHILOSOPHERS - 1];
+#endif
+		}else{
+			n = NUM_PHILOSOPHERS - 1;
+#if not(PRODUCE_RACE_CONDITION)
+			tokenRight = &token[n];
+#endif
+		}
 
 		phil->setId(i);
+#if not(PRODUCE_RACE_CONDITION)
 		phil->setHisForks(token, tokenRight);
+#else
+		phil->setHisForks(_tableNr44.fork(i), _tableNr44.fork(n));
+#endif
 
 		/* optional begin */
 			phil->startedEating.connect(this, &Application::onPhilosopherStartedEating);
@@ -123,6 +144,17 @@ bool Application::allPhilosophersFinished()
 	}
 
 	return true;
+}
+
+bool Application::raceConditionDetected()
+{
+	for(uint32_t i = 0; i < NUM_PHILOSOPHERS; ++i)
+	{
+		if(_tableNr44.fork(i)->dirtyCount())
+			return true;
+	}
+
+	return false;
 }
 
 /* optional begin */

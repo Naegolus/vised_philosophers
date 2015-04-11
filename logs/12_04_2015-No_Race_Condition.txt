@@ -1,0 +1,58 @@
+$ ./obj/multi
+
+Executing multi threaded Application
+
+1 is hungry
+0 is hungry
+3 is hungry
+4 is hungry
+2 is hungry
+1 started eating
+3 started eating
+1 started thinking. Remaining thoughts: 
+1 is hungry
+3 started thinking. Remaining thoughts: 
+3 is hungry
+4 started eating
+2 started eating
+2 started thinking. Remaining thoughts: 
+2 is hungry
+4 started thinking. Remaining thoughts: 
+4 is hungry
+0 started eating
+3 started eating
+0 started thinking. Remaining thoughts: 
+0 is hungry
+3 started thinking. Remaining thoughts: 
+3 is hungry
+1 started eating
+4 started eating
+1 started thinking. Remaining thoughts: 
+1 is hungry
+2 started eating
+4 started thinking. Remaining thoughts: 
+4 is hungry
+0 started eating
+2 started thinking. Remaining thoughts: 
+2 is hungry
+3 started eating
+0 started thinking. Remaining thoughts: 
+0 is hungry
+1 started eating
+3 started thinking. Remaining thoughts: 
+3 finished thinking
+1 started thinking. Remaining thoughts: 
+1 finished thinking
+4 started eating
+2 started eating
+2 started thinking. Remaining thoughts: 
+2 finished thinking
+4 started thinking. Remaining thoughts: 
+4 finished thinking
+0 started eating
+0 started thinking. Remaining thoughts: 
+0 finished thinking
+
+Result: No race condition detected.
+
+Application finished
