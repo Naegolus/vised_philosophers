@@ -31,6 +31,7 @@
 #ifndef SRC_FORK_H_
 #define SRC_FORK_H_
 
+#include <cstdint>
 #include "object.h"
 
 class Fork : public Object
@@ -42,9 +43,10 @@ public:
 	void makeDirty(); /* non const -> changes fork */
 	void makeClean();
 
-	bool isDirty() const;
+	uint32_t dirtyCount() const;
+
 private:
-	bool _isDirty;
+	uint32_t _dirtyCount;
 };
 
 #endif /* SRC_FORK_H_ */

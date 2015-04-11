@@ -30,7 +30,7 @@
 
 #include "fork.h"
 
-Fork::Fork() : _isDirty(false)
+Fork::Fork() : _dirtyCount(0)
 {
 }
 
@@ -40,15 +40,15 @@ Fork::~Fork()
 
 void Fork::makeDirty()
 {
-	_isDirty = true;
+	++_dirtyCount;
 }
 
 void Fork::makeClean()
 {
-	_isDirty = false;
+	--_dirtyCount;
 }
 
-bool Fork::isDirty() const
+uint32_t Fork::dirtyCount() const
 {
-	return _isDirty;
+	return _dirtyCount;
 }
