@@ -34,7 +34,5 @@ Application app;
 
 int main(int argc, char *argv[])
 {
-	app.execute(argc, argv);
-
-	return 0;
+	return app.execute(argc, argv);
 }

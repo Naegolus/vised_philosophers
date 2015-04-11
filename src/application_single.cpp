@@ -47,7 +47,7 @@ Application::~Application()
 	delete[] _philosophers;
 }
 
-void Application::execute(int argc, char *argv[])
+int Application::execute(int argc, char *argv[])
 {
 	chrono::milliseconds interval(MAIN_INTERVAL);
 
@@ -55,8 +55,16 @@ void Application::execute(int argc, char *argv[])
 	cout << "Executing multi threaded Application" << endl << endl;
 
 	if(1 < argc)
-		createObjects(atoi(argv[1]));
-	else
+	{
+		uint32_t numObjects = atoi(argv[1]);
+
+		if(2 > numObjects)
+		{
+			cerr << "Error: At least two philosophers must be dining." << endl;
+			return 1;
+		}
+		createObjects(numObjects);
+	}else
 		createObjects(5);
 
 	connectObjects();
@@ -71,6 +79,8 @@ void Application::execute(int argc, char *argv[])
 
 	cout << endl << "Application finished" << endl;
 	cout << endl;
+
+	return 0;
 }
 
 void Application::createObjects(uint32_t count)

@@ -45,7 +45,7 @@ public:
 	Application();
 	virtual ~Application();
 
-	void execute(int argc, char *argv[]);
+	int execute(int argc, char *argv[]);
 	void createObjects(uint32_t count);
 	void connectObjects();
 
