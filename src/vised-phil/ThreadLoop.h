@@ -28,54 +28,43 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "transition.h"
+#ifndef THREADLOOP_H_
+#define THREADLOOP_H_
 
-using namespace std;
+#include <cstdint>
+#include <thread>
+#include "Object.h"
 
-typedef lock_guard<mutex> Lock;
-typedef list<DataTokenBase *>::const_iterator ConstIter;
-
-mutex Transition::_mtxFire;
-
-Transition::Transition()
+class ThreadLoop : public Object
 {
-}
+public:
+	ThreadLoop();
+	virtual ~ThreadLoop();
 
-Transition::~Transition()
-{
-}
+	void start();
+	void start(const uint32_t msec);
+	void requestFinish();
+	bool isFinished() const;
+	void join();
+	bool join(const uint32_t timeout_ms);
+	void shutdown();
+	bool shutdown(const uint32_t timeout_ms);
+	void kill();
 
-void Transition::addInput(DataTokenBase *token)
-{
-	inputs.push_back(token);
-}
+	signal0<> ticked;
 
-void Transition::addOutput(DataTokenBase *token)
-{
-	outputs.push_back(token);
-}
+private:
+	void tick();
+	bool joinOrShutdown(const uint32_t timeout_ms, bool shutdown);
+	bool killedByTimeout(uint32_t timeout_ms);
 
-bool Transition::fired() const
-{
-	Lock lock(_mtxFire);
+	std::thread *_p_thread;
+	uint32_t _timerInterval;
+	bool _threadRunning;
+	bool _threadIsDone;
 
-	/* check if transition is able to fire */
-	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
-	{
-		if((*token)->isEmpty())
-			return false;
-	}
-	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
-	{
-		if((*token)->isFull())
-			return false;
-	}
+	const float TICK_TO_SEC = (float)1.0 / CLOCKS_PER_SEC;
+	const float SEC_TO_MS = 1000;
+};
 
-	/* all conditions met -> fire */
-	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
-		--(*token)->_numToken;
-	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
-		++(*token)->_numToken;
-
-	return true;
-}
+#endif /* THREADLOOP_H_ */

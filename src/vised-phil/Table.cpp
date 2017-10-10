@@ -28,32 +28,24 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "fork.h"
+#include "Table.h"
 
-Fork::Fork() : _dirtyCount(0)
+Table::Table() :
+		_forks(0)
 {
 }
 
-Fork::~Fork()
+Table::~Table()
 {
+	delete[] _forks;
 }
 
-void Fork::makeDirty()
+void Table::createForks(uint32_t numForks)
 {
-	uint32_t dirtyCount = _dirtyCount;
-
-	_fib.calc(16);
-	++dirtyCount;
-
-	_dirtyCount = dirtyCount;
+	_forks = new Fork[numForks];
 }
 
-void Fork::makeClean()
+Fork *Table::fork(uint32_t idx) const
 {
-	--_dirtyCount;
-}
-
-uint32_t Fork::dirtyCount() const
-{
-	return _dirtyCount;
+	return &_forks[idx];
 }

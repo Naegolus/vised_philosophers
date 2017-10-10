@@ -22,8 +22,8 @@
 
 bin_PROGRAMS = vised-phil
 
-vised_phil_SOURCES = main.cpp application_multi.cpp fibonacci.cpp \
-		fork.cpp philosopher.cpp table.cpp thread_loop.cpp transition.cpp
+vised_phil_SOURCES = main.cpp VisedPhil_Multi.cpp Fibonacci.cpp \
+		Fork.cpp Philosopher.cpp Table.cpp ThreadLoop.cpp Transition.cpp
 
 AM_CPPFLAGS = \
 		-I${srcdir}/include \

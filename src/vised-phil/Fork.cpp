@@ -28,24 +28,32 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef SRC_TABLE_H_
-#define SRC_TABLE_H_
+#include "Fork.h"
 
-#include <cstdint>
-#include "object.h"
-#include "fork.h"
-
-class Table : public Object
+Fork::Fork() : _dirtyCount(0)
 {
-public:
-	Table();
-	virtual ~Table();
+}
 
-	void createForks(uint32_t numForks);
-	Fork *fork(uint32_t idx) const;
+Fork::~Fork()
+{
+}
 
-private:
-	Fork *_forks;
-};
+void Fork::makeDirty()
+{
+	uint32_t dirtyCount = _dirtyCount;
 
-#endif /* SRC_TABLE_H_ */
+	_fib.calc(16);
+	++dirtyCount;
+
+	_dirtyCount = dirtyCount;
+}
+
+void Fork::makeClean()
+{
+	--_dirtyCount;
+}
+
+uint32_t Fork::dirtyCount() const
+{
+	return _dirtyCount;
+}

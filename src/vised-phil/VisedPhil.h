@@ -28,21 +28,48 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "fibonacci.h"
+#ifndef VISED_PHIL_H_
+#define VISED_PHIL_H_
 
-Fibonacci::Fibonacci()
+#include <cstdint>
+#include <mutex>
+#include "Object.h"
+#include "Table.h"
+#include "Philosopher.h"
+#include "ThreadLoop.h"
+
+class VisedPhil : public Object
 {
-}
+public:
+	VisedPhil();
+	virtual ~VisedPhil();
 
-Fibonacci::~Fibonacci()
-{
-}
+	int exec(int argc, char *argv[]);
+	void createObjects(uint32_t count);
+	void connectObjects();
 
-uint32_t Fibonacci::calc(uint32_t num)
-{
-	if(0 == num or 1 == num)
-		return 1;
-	else
-		return calc(num - 1) + calc(num - 2);
+	/* slots */
+	void onPhilosopherStartedEating(Philosopher *p);
+	void onPhilosopherStartedThinking(Philosopher *p);
+	void onPhilosopherIsHungry(Philosopher *p);
+	void onPhilosopherFinishedThinking(Philosopher *p);
 
-}
+private:
+	bool allPhilosophersFinished();
+	bool raceConditionDetected();
+
+	bool appRunning;
+	std::mutex mtxCout;
+
+	uint32_t numPhilosophers;
+
+	Table tableNr44;
+	Philosopher *philosophers;
+	ThreadLoop *threads;
+
+	const uint32_t MAIN_INTERVAL = 1;
+	const uint32_t CHECK_INTERVAL = 100;
+	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
+};
+
+#endif /* VISED_PHIL_H_ */

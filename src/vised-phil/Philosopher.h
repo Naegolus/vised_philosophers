@@ -28,50 +28,76 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef APPLICATION_H_
-#define APPLICATION_H_
+#ifndef SRC_PHILOSOPHER_H_
+#define SRC_PHILOSOPHER_H_
 
-#include <cstdint>
-#include <mutex>
-#include "object.h"
-#include "data_token.h"
-#include "table.h"
-#include "philosopher.h"
-#include "thread_loop.h"
+#include "Object.h"
+#include "Transition.h"
+#include "Fork.h"
+#include "Fibonacci.h"
 
-class Application : public Object
+typedef DataToken<Fork> ForkToken;
+
+class Philosopher : public Object
 {
 public:
-	Application();
-	virtual ~Application();
+	Philosopher();
+	virtual ~Philosopher();
 
-	int execute(int argc, char *argv[]);
-	void createObjects(uint32_t count);
-	void connectObjects();
+	void setId(uint32_t id);
+	uint32_t id() const;
 
-	/* slots */
-	void onPhilosopherStartedEating(Philosopher *p);
-	void onPhilosopherStartedThinking(Philosopher *p);
-	void onPhilosopherIsHungry(Philosopher *p);
-	void onPhilosopherFinishedThinking(Philosopher *p);
+	/* using Philosopher singlethreaded -> ForkToken are internal and distributed */
+	void setHisForks(Fork *leftFork, Fork *rightFork);
+
+	/* using Philosopher multithreaded -> ForkToken are external and centralized */
+	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
+
+	void doStuff();
+	uint32_t remainingThinkingCycles() const;
+	bool isFinished();
+
+	/* signals */
+	signal0<> finished; /* because of thread. bad: better map in application */
+	/* begin optional */
+	  signal1<Philosopher *> startedEating;
+	  signal1<Philosopher *> startedThinking;
+	  signal1<Philosopher *> isHungry;
+	  signal1<Philosopher *> finishedThinking;
+	/* end optional */
 
 private:
-	bool allPhilosophersFinished();
-	bool raceConditionDetected();
+	uint32_t _id;
 
-	bool _appRunning;
-	std::mutex _mtxCout;
+	Fork *_leftFork;
+	Fork *_rightFork;
 
-	uint32_t _numPhilosophers;
+	ForkToken _leftForkToken;
+	ForkToken _rightForkToken;
 
-	Table _tableNr44;
-	Philosopher *_philosophers;
-	ThreadLoop *_threads;
-	ForkToken *_forkToken;
+	Transition _acquireForks;
+	Transition _releaseForks;
 
-	const uint32_t MAIN_INTERVAL = 1;
-	const uint32_t CHECK_INTERVAL = 100;
-	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
+	/* for deadlock test only */
+	Transition _acquireLeftFork;
+	Transition _acquireRightFork;
+
+	typedef enum
+	{
+		StateStartup = 0,
+		StateHungry,
+		StateAcquireRightFork, /* for deadlock test only */
+		StateEating,
+		StateWaitForThinking,
+		StateThinking,
+		StateDone
+	} PhilosopherState;
+
+	const uint32_t NumThinkingCycles = 3;
+
+	PhilosopherState _state;
+	Fibonacci _fib;
+	uint32_t _remainingThinkingCycles;
 };
 
-#endif /* APPLICATION_H_ */
+#endif /* SRC_PHILOSOPHER_H_ */

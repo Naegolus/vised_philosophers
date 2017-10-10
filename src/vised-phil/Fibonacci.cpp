@@ -28,76 +28,21 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef SRC_PHILOSOPHER_H_
-#define SRC_PHILOSOPHER_H_
+#include "Fibonacci.h"
 
-#include "object.h"
-#include "transition.h"
-#include "fork.h"
-#include "fibonacci.h"
-
-typedef DataToken<Fork> ForkToken;
-
-class Philosopher : public Object
+Fibonacci::Fibonacci()
 {
-public:
-	Philosopher();
-	virtual ~Philosopher();
+}
 
-	void setId(uint32_t id);
-	uint32_t id() const;
+Fibonacci::~Fibonacci()
+{
+}
 
-	/* using Philosopher singlethreaded -> ForkToken are internal and distributed */
-	void setHisForks(Fork *leftFork, Fork *rightFork);
+uint32_t Fibonacci::calc(uint32_t num)
+{
+	if(0 == num or 1 == num)
+		return 1;
+	else
+		return calc(num - 1) + calc(num - 2);
 
-	/* using Philosopher multithreaded -> ForkToken are external and centralized */
-	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
-
-	void doStuff();
-	uint32_t remainingThinkingCycles() const;
-	bool isFinished();
-
-	/* signals */
-	signal0<> finished; /* because of thread. bad: better map in application */
-	/* begin optional */
-	  signal1<Philosopher *> startedEating;
-	  signal1<Philosopher *> startedThinking;
-	  signal1<Philosopher *> isHungry;
-	  signal1<Philosopher *> finishedThinking;
-	/* end optional */
-
-private:
-	uint32_t _id;
-
-	Fork *_leftFork;
-	Fork *_rightFork;
-
-	ForkToken _leftForkToken;
-	ForkToken _rightForkToken;
-
-	Transition _acquireForks;
-	Transition _releaseForks;
-
-	/* for deadlock test only */
-	Transition _acquireLeftFork;
-	Transition _acquireRightFork;
-
-	typedef enum
-	{
-		StateStartup = 0,
-		StateHungry,
-		StateAcquireRightFork, /* for deadlock test only */
-		StateEating,
-		StateWaitForThinking,
-		StateThinking,
-		StateDone
-	} PhilosopherState;
-
-	const uint32_t NumThinkingCycles = 3;
-
-	PhilosopherState _state;
-	Fibonacci _fib;
-	uint32_t _remainingThinkingCycles;
-};
-
-#endif /* SRC_PHILOSOPHER_H_ */
+}

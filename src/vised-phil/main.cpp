@@ -21,11 +21,11 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "application.h"
+#include "VisedPhil.h"
 
-Application app;
+VisedPhil app;
 
 int main(int argc, char *argv[])
 {
-	return app.execute(argc, argv);
+	return app.exec(argc, argv);
 }

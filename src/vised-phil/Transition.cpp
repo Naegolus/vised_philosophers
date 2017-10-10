@@ -28,28 +28,54 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef SRC_FORK_H_
-#define SRC_FORK_H_
+#include "Transition.h"
 
-#include <cstdint>
-#include "object.h"
-#include "fibonacci.h"
+using namespace std;
 
-class Fork : public Object
+typedef lock_guard<mutex> Lock;
+typedef list<DataTokenBase *>::const_iterator ConstIter;
+
+mutex Transition::_mtxFire;
+
+Transition::Transition()
 {
-public:
-	Fork();
-	virtual ~Fork();
+}
 
-	void makeDirty(); /* non const -> changes fork */
-	void makeClean();
+Transition::~Transition()
+{
+}
 
-	uint32_t dirtyCount() const;
+void Transition::addInput(DataTokenBase *token)
+{
+	inputs.push_back(token);
+}
 
-private:
-	Fibonacci _fib;
+void Transition::addOutput(DataTokenBase *token)
+{
+	outputs.push_back(token);
+}
 
-	uint32_t _dirtyCount;
-};
+bool Transition::fired() const
+{
+	Lock lock(_mtxFire);
 
-#endif /* SRC_FORK_H_ */
+	/* check if transition is able to fire */
+	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
+	{
+		if((*token)->isEmpty())
+			return false;
+	}
+	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
+	{
+		if((*token)->isFull())
+			return false;
+	}
+
+	/* all conditions met -> fire */
+	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
+		--(*token)->_numToken;
+	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
+		++(*token)->_numToken;
+
+	return true;
+}

@@ -28,43 +28,28 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef THREADLOOP_H_
-#define THREADLOOP_H_
+#ifndef SRC_FORK_H_
+#define SRC_FORK_H_
 
 #include <cstdint>
-#include <thread>
-#include "object.h"
+#include "Object.h"
+#include "Fibonacci.h"
 
-class ThreadLoop : public Object
+class Fork : public Object
 {
 public:
-	ThreadLoop();
-	virtual ~ThreadLoop();
+	Fork();
+	virtual ~Fork();
 
-	void start();
-	void start(const uint32_t msec);
-	void requestFinish();
-	bool isFinished() const;
-	void join();
-	bool join(const uint32_t timeout_ms);
-	void shutdown();
-	bool shutdown(const uint32_t timeout_ms);
-	void kill();
+	void makeDirty(); /* non const -> changes fork */
+	void makeClean();
 
-	signal0<> ticked;
+	uint32_t dirtyCount() const;
 
 private:
-	void tick();
-	bool joinOrShutdown(const uint32_t timeout_ms, bool shutdown);
-	bool killedByTimeout(uint32_t timeout_ms);
+	Fibonacci _fib;
 
-	std::thread *_p_thread;
-	uint32_t _timerInterval;
-	bool _threadRunning;
-	bool _threadIsDone;
-
-	const float TICK_TO_SEC = (float)1.0 / CLOCKS_PER_SEC;
-	const float SEC_TO_MS = 1000;
+	uint32_t _dirtyCount;
 };
 
-#endif /* THREADLOOP_H_ */
+#endif /* SRC_FORK_H_ */

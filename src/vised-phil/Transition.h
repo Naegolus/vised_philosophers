@@ -28,24 +28,29 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "table.h"
+#ifndef SRC_TRANSITION_H_
+#define SRC_TRANSITION_H_
 
-Table::Table() :
-		_forks(0)
-{
-}
+#include <mutex>
+#include <list>
+#include "DataToken.h"
 
-Table::~Table()
+class Transition
 {
-	delete[] _forks;
-}
+public:
+	Transition();
+	virtual ~Transition();
 
-void Table::createForks(uint32_t numForks)
-{
-	_forks = new Fork[numForks];
-}
+	void addInput(DataTokenBase *token);
+	void addOutput(DataTokenBase *token);
 
-Fork *Table::fork(uint32_t idx) const
-{
-	return &_forks[idx];
-}
+	bool fired() const;
+
+private:
+	static std::mutex _mtxFire;
+
+	std::list<DataTokenBase *> inputs;
+	std::list<DataTokenBase *> outputs;
+};
+
+#endif /* SRC_TRANSITION_H_ */
