@@ -26,4 +26,8 @@ vised_phil_SOURCES = main.cpp application_multi.cpp fibonacci.cpp \
 		fork.cpp philosopher.cpp table.cpp thread_loop.cpp transition.cpp
 
 AM_CPPFLAGS = \
-		-I${srcdir}/include
+		-I${srcdir}/include \
+		-std=c++11
+
+# AM_LDFLAGS could be used
+vised_phil_LDFLAGS = -pthread
