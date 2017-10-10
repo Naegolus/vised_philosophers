@@ -48,7 +48,7 @@ AC_SUBST([HAL_TYPE])
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
-	src/vised_phil/Makefile
+	src/vised-phil/Makefile
 ])
 
 AC_OUTPUT
