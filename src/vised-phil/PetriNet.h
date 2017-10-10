@@ -28,89 +28,91 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#ifndef SRC_DATA_TOKEN_H_
-#define SRC_DATA_TOKEN_H_
+#ifndef PETRI_NET_H_
+#define PETRI_NET_H_
 
 #include <cstdint>
-#include <iostream>
+#include <list>
+#include <mutex>
 
-/* Info: Token are only necessary if multiple threads
- *       need access to common resources. The class
- *       Transition manages the access to the resources */
-
-class DataTokenBase
+class PetriNet
 {
-	friend class Transition;
-
 public:
-	DataTokenBase() : _data(0), _capacity(1), _numToken(1) {}
-	DataTokenBase(void *data) : _data(data), _capacity(1), _numToken(1) {}
-	DataTokenBase(void *data, uint32_t capacity) : _data(data), _capacity(capacity), _numToken(capacity) {}
-	virtual ~DataTokenBase() {}
-
-protected:
-	void setData(void *data)
+	static PetriNet &instance()
 	{
-		_data = data;
+		static PetriNet instance;
+		return instance;
+	}
+	virtual ~PetriNet();
+
+	/* TODO */
+	void bindResourcePool() {}
+
+	/*
+		false if:
+		- pointer to resource is null
+		- resource is already added
+	*/
+	bool addResource(void *resource)
+	{
+		std::pair<std::map<void *, uint32_t>::iterator, bool> ret;
+
+		ret = globalResources.insert(std::pair<void *, uint32_t>(resource, 1));
+
+		return ret.second;
 	}
 
-	void setCapacity(uint32_t capacity)
+	/*
+		false if:
+		- at least one of the resources can't be aquired at the time being
+	*/
+	bool lockResources(std::list<void *> &transitionResources)
 	{
-		_numToken = _capacity = capacity;
+		return false;
 	}
 
-	void *voidData() const
+	void unlockResources(std::list<void *> &transitionResources)
 	{
-		return _data;
 	}
 
 private:
-	bool isEmpty() const
-	{
-		if(!_data)
-		{
-			std::cerr << "Error in DataTokenBase::isEmpty(): Token requested before data has been bound to token" << std::endl;
-			return true; /* we are lying, but no one should use a null pointer */
-		}
+	static std::mutex resMtx;
+	PetriNet();
+	PetriNet(PetriNet const &);
+	void operator=(PetriNet const &);
 
-		return !_numToken;
-	}
-	bool isFull() const
-	{
-		if(!_data)
-		{
-			std::cerr << "Error in DataTokenBase::isFull(): Token released before data has been bound to token" << std::endl;
-			return true; /* we are lying, but no one should use a null pointer */
-		}
-
-		return _numToken == _capacity;
-	}
-
-	void *_data;
-	uint32_t _capacity;
-	/* this member is changed directly by class Transition */
-	uint32_t _numToken;
+	std::map<void *, uint32_t> globalResources;
 };
 
-template<typename T>
-class DataToken : public DataTokenBase
+class Transition
 {
 public:
-	DataToken() {}
-	DataToken(T *data) : DataTokenBase(&data) {}
-	DataToken(T *data, uint32_t capacity) : DataTokenBase(data, capacity) {}
-	virtual ~DataToken() {}
+	Transition();
+	virtual ~Transition();
 
-	void bind(T *data, uint32_t capacity = 1)
+	/*
+		false if:
+		- pointer to resource is null
+		- resource is not found in petri net
+		- resource is already bound
+	*/
+	bool bindResource(void *resource)
 	{
-		setData(data);
-		setCapacity(capacity);
+		if (!resource)
+			return false;
+
+		return false;
 	}
 
-	T *data() const /* function data() doesn't change this class, but the data may be changed */
-	{
-		return (T *)voidData();
-	}
+	bool lockResources()
+	{ return PetriNet::instance().lockResources(resources); }
+
+	void unlockResources()
+	{ PetriNet::instance().unlockResources(resources); }
+
+private:
+	std::list<void *> resources;
 };
 
-#endif /* SRC_DATA_TOKEN_H_ */
+#endif /* PETRI_NET_H_ */
+

@@ -28,14 +28,14 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "Transition.h"
+#include "PetriNet.h"
 
 using namespace std;
 
 typedef lock_guard<mutex> Lock;
 typedef list<DataTokenBase *>::const_iterator ConstIter;
 
-mutex Transition::_mtxFire;
+mutex Transition::mtxFire;
 
 Transition::Transition()
 {
@@ -57,7 +57,7 @@ void Transition::addOutput(DataTokenBase *token)
 
 bool Transition::fired() const
 {
-	Lock lock(_mtxFire);
+	Lock lock(mtxFire);
 
 	/* check if transition is able to fire */
 	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)

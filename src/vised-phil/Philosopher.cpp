@@ -31,11 +31,11 @@
 #include "Philosopher.h"
 
 Philosopher::Philosopher() :
-			_id(0),
-			_leftFork(0),
-			_rightFork(0),
-			_state(StateStartup),
-			_remainingThinkingCycles(NumThinkingCycles)
+			mId(0),
+			leftFork(0),
+			rightFork(0),
+			state(StateStartup),
+			remThinkCycs(NumThinkingCycles)
 {
 }
 
@@ -45,96 +45,74 @@ Philosopher::~Philosopher()
 
 void Philosopher::setId(uint32_t id)
 {
-	_id = id;
+	mId = id;
 }
 
 uint32_t Philosopher::id() const
 {
-	return _id;
+	return mId;
 }
 
 void Philosopher::setHisForks(Fork *leftFork, Fork *rightFork)
 {
 	/* bind forks to internal token -> access to resource is always granted */
-	_leftForkToken.bind(leftFork);
-	_rightForkToken.bind(rightFork);
+	leftForkToken.bind(leftFork);
+	rightForkToken.bind(rightFork);
 
-	setHisForks(&_leftForkToken, &_rightForkToken);
-}
-
-#define PRODUCE_DEADLOCK 0
-void Philosopher::setHisForks(ForkToken *leftFork, ForkToken *rightFork)
-{
-	_leftFork = leftFork->data();
-	_rightFork = rightFork->data();
-
-#if not(PRODUCE_DEADLOCK)
-	_acquireForks.addInput(leftFork);
-	_acquireForks.addInput(rightFork);
-#else
-	_acquireLeftFork.addInput(leftFork);
-	_acquireRightFork.addInput(rightFork);
-#endif
-
-	_releaseForks.addOutput(leftFork);
-	_releaseForks.addOutput(rightFork);
+	setHisForks(&leftForkToken, &rightForkToken);
 }
 
 void Philosopher::doStuff()
 {
-	switch(_state)
+	switch(state)
 	{
 	case StateStartup:
-		_state = StateHungry;
+		state = StateHungry;
 		isHungry(this);
 		break;
 	case StateHungry:
-#if not(PRODUCE_DEADLOCK)
-		if(_acquireForks.fired())
-			_state = StateEating;
-#else
-		if(_acquireLeftFork.fired())
-			_state = StateAcquireRightFork;
-#endif
+		if(forks.fired())
+			state = StateEating;
+
 		break;
 	case StateAcquireRightFork:
 
-		_fib.calc(5); /* for deadlock test only */
+		fib.calc(5); /* for deadlock test only */
 
 		if(_acquireRightFork.fired())
-			_state = StateEating;
+			state = StateEating;
 		break;
 	case StateEating:
 
 		startedEating(this);
 
 		/* read something from data container */
-		_leftFork->makeDirty();
-		_rightFork->makeDirty();
+		leftFork->makeDirty();
+		rightFork->makeDirty();
 
 		/* calculate something */
-		_fib.calc(40);
+		fib.calc(40);
 
 		/* write something to data container */
-		_leftFork->makeClean();
-		_rightFork->makeClean();
+		leftFork->makeClean();
+		rightFork->makeClean();
 
-		_state = StateWaitForThinking;
+		state = StateWaitForThinking;
 		break;
 	case StateWaitForThinking:
 		if(_releaseForks.fired())
-			_state = StateThinking;
+			state = StateThinking;
 		break;
 	case StateThinking:
 
 		startedThinking(this);
 
-		if(--_remainingThinkingCycles)
+		if(--remThinkCycs)
 		{
-			_state = StateHungry;
+			state = StateHungry;
 			isHungry(this);
 		}else{
-			_state = StateDone;
+			state = StateDone;
 			finished();
 			finishedThinking(this);
 		}
@@ -146,10 +124,10 @@ void Philosopher::doStuff()
 
 uint32_t Philosopher::remainingThinkingCycles() const
 {
-	return _remainingThinkingCycles;
+	return remThinkCycs;
 }
 
-bool Philosopher::isFinished()
+bool Philosopher::isFinished() const
 {
-	return StateDone == _state;
+	return StateDone == state;
 }

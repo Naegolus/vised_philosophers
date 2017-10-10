@@ -32,11 +32,9 @@
 #define SRC_PHILOSOPHER_H_
 
 #include "Object.h"
-#include "Transition.h"
 #include "Fork.h"
 #include "Fibonacci.h"
-
-typedef DataToken<Fork> ForkToken;
+#include "PetriNet.h"
 
 class Philosopher : public Object
 {
@@ -47,15 +45,11 @@ public:
 	void setId(uint32_t id);
 	uint32_t id() const;
 
-	/* using Philosopher singlethreaded -> ForkToken are internal and distributed */
 	void setHisForks(Fork *leftFork, Fork *rightFork);
-
-	/* using Philosopher multithreaded -> ForkToken are external and centralized */
-	void setHisForks(ForkToken *leftFork, ForkToken *rightFork);
 
 	void doStuff();
 	uint32_t remainingThinkingCycles() const;
-	bool isFinished();
+	bool isFinished() const;
 
 	/* signals */
 	signal0<> finished; /* because of thread. bad: better map in application */
@@ -67,20 +61,17 @@ public:
 	/* end optional */
 
 private:
-	uint32_t _id;
+	uint32_t mId;
 
-	Fork *_leftFork;
-	Fork *_rightFork;
+	Fork *leftFork;
+	Fork *rightFork;
 
-	ForkToken _leftForkToken;
-	ForkToken _rightForkToken;
-
-	Transition _acquireForks;
-	Transition _releaseForks;
+	Transition acquireForks;
+	Transition releaseForks;
 
 	/* for deadlock test only */
-	Transition _acquireLeftFork;
-	Transition _acquireRightFork;
+	Transition acquireLeftFork;
+	Transition acquireRightFork;
 
 	typedef enum
 	{
@@ -95,9 +86,9 @@ private:
 
 	const uint32_t NumThinkingCycles = 3;
 
-	PhilosopherState _state;
-	Fibonacci _fib;
-	uint32_t _remainingThinkingCycles;
+	PhilosopherState state;
+	Fibonacci fib;
+	uint32_t remThinkCycs;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */
