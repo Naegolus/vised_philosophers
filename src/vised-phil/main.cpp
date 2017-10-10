@@ -21,7 +21,7 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Application.h"
+#include "application.h"
 
 Application app;
 
