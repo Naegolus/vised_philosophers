@@ -1,8 +1,35 @@
 
-obj/*.o
-obj/*.d
-obj/single
-obj/multi
-
 doc/*.png
 
+# autoreconf --install
+*.in
+*.in~
+install-sh
+compile
+configure
+*.m4
+*.cache
+depcomp
+missing
+ar-lib
+ltmain.sh
+
+# configure
+Makefile
+config.h
+config.log
+config.status
+config.guess
+config.sub
+.deps/
+stamp-h1
+
+# make
+*.o
+vised-phil
+!vised-phil/
+*.exe
+build*/
+
+# make distcheck
+*.tar.gz
