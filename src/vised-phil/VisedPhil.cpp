@@ -28,21 +28,100 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
-#include "Fibonacci.h"
+#include <iostream>
+#include <stdlib.h>
+#include "VisedPhil.h"
+#include "config.h"
 
-Fibonacci::Fibonacci()
+using namespace std;
+
+VisedPhil::VisedPhil() :
+			appRunning(true),
+			numPhilosophers(0),
+			forks(0),
+			philosophers(0),
+			threads(0)
 {
 }
 
-Fibonacci::~Fibonacci()
+VisedPhil::~VisedPhil()
 {
+	delete[] philosophers;
+	delete[] threads;
 }
 
-uint32_t Fibonacci::calc(uint32_t num)
+int VisedPhil::exec(int argc, char *argv[])
 {
-	if(0 == num or 1 == num)
-		return 1;
+	chrono::milliseconds interval(CHECK_INTERVAL);
+
+	cout << endl << "Executing " << VERSION << endl << endl;
+
+	if (1 < argc)
+		numPhilosophers = atoi(argv[1]);
 	else
-		return calc(num - 1) + calc(num - 2);
+		numPhilosophers = 5;
 
+	appInit();
+
+	while (appRunning)
+	{
+		appCycle();
+		this_thread::sleep_for(interval);
+	}
+
+	cout << endl << "Finished" << endl << endl;
+
+	return 0;
 }
+
+void VisedPhil::appInit()
+{
+	uint32_t n;
+	Philosopher *phil = philosophers = new Philosopher[numPhilosophers];
+	ThreadLoop *thread = threads = new ThreadLoop[numPhilosophers];
+	forks = new Fork[numPhilosophers];
+
+	for(uint32_t i = 0; i < numPhilosophers; ++i)
+	{
+		thread->ticked.connect(phil, &Philosopher::cyclic);
+
+		n = i ? i - 1 : numPhilosophers - 1;
+		phil->setId(i);
+		phil->bindForks(forks(i), forks(n));
+
+		thread.start();
+
+		++phil;
+		++thread;
+	}
+}
+
+void VisedPhil::appCycle()
+{
+	Philosopher *phil = philosophers;
+	bool statusPrinted = false;
+
+	appRunning = false;
+
+	for(uint32_t i = 0; i < numPhilosophers; ++i)
+	{
+		if (phil->ackChanged() and not statusPrinted)
+		{
+			printStatus();
+			statusPrinted = true;
+		}
+
+		if (phil->remainingThinkingCycles())
+			appRunning = true;
+
+		++phil;
+	}
+}
+
+/* Only print status if something has changed */
+void VisedPhil::printStatus()
+{
+	/* Philosopher - Eating - Progress */
+	/*          10        x   |==== | 4/5 */
+}
+

@@ -33,8 +33,6 @@
 
 #include "Object.h"
 #include "Fork.h"
-#include "Fibonacci.h"
-#include "PetriNet.h"
 
 class Philosopher : public Object
 {
@@ -45,50 +43,35 @@ public:
 	void setId(uint32_t id);
 	uint32_t id() const;
 
-	void setHisForks(Fork *leftFork, Fork *rightFork);
+	void bindForks(Fork *left, Fork *right);
 
-	void doStuff();
-	uint32_t remainingThinkingCycles() const;
-	bool isFinished() const;
+	void cyclic();
+	bool isEating() const;
+	uint32_t remainingCycles() const
 
-	/* signals */
-	signal0<> finished; /* because of thread. bad: better map in application */
-	/* begin optional */
-	  signal1<Philosopher *> startedEating;
-	  signal1<Philosopher *> startedThinking;
-	  signal1<Philosopher *> isHungry;
-	  signal1<Philosopher *> finishedThinking;
-	/* end optional */
+	bool ackChanged();
 
 private:
-	uint32_t mId;
-
-	Fork *leftFork;
-	Fork *rightFork;
-
-	Transition acquireForks;
-	Transition releaseForks;
-
-	/* for deadlock test only */
-	Transition acquireLeftFork;
-	Transition acquireRightFork;
-
 	typedef enum
 	{
-		StateStartup = 0,
-		StateHungry,
-		StateAcquireRightFork, /* for deadlock test only */
+		StateHungry = 0,
 		StateEating,
-		StateWaitForThinking,
 		StateThinking,
 		StateDone
 	} PhilosopherState;
 
-	const uint32_t NumThinkingCycles = 3;
+	void setState(PhilosopherState newState);
 
-	PhilosopherState state;
-	Fibonacci fib;
+	std::mutex mtxInternal;
+	uint32_t mId;
 	uint32_t remThinkCycs;
+	bool changed;
+	Fork *leftFork;
+	Fork *rightFork;
+	Transition forks;
+	PhilosopherState state;
+
+	const uint32_t NumThinkingCycles = 3;
 };
 
 #endif /* SRC_PHILOSOPHER_H_ */

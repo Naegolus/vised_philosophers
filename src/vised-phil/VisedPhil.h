@@ -34,7 +34,6 @@
 #include <cstdint>
 #include <mutex>
 #include "Object.h"
-#include "Table.h"
 #include "Philosopher.h"
 #include "ThreadLoop.h"
 
@@ -45,31 +44,19 @@ public:
 	virtual ~VisedPhil();
 
 	int exec(int argc, char *argv[]);
-	void createObjects(uint32_t count);
-	void connectObjects();
-
-	/* slots */
-	void onPhilosopherStartedEating(Philosopher *p);
-	void onPhilosopherStartedThinking(Philosopher *p);
-	void onPhilosopherIsHungry(Philosopher *p);
-	void onPhilosopherFinishedThinking(Philosopher *p);
+	void appCycle();
 
 private:
-	bool allPhilosophersFinished();
-	bool raceConditionDetected();
+	void connectObjects();
+	void printStatus();
 
 	bool appRunning;
-	std::mutex mtxCout;
-
 	uint32_t numPhilosophers;
-
-	Table tableNr44;
+	Fork *forks;
 	Philosopher *philosophers;
 	ThreadLoop *threads;
 
-	const uint32_t MAIN_INTERVAL = 1;
-	const uint32_t CHECK_INTERVAL = 100;
-	const uint32_t THREAD_SHUTDOWN_TIMEOUT_MS = 1000;
+	const uint32_t CHECK_INTERVAL = 20;
 };
 
 #endif /* VISED_PHIL_H_ */

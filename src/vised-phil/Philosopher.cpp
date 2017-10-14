@@ -34,8 +34,9 @@ Philosopher::Philosopher() :
 			mId(0),
 			leftFork(0),
 			rightFork(0),
-			state(StateStartup),
-			remThinkCycs(NumThinkingCycles)
+			state(StateHungry),
+			remThinkCycs(NumThinkingCycles),
+			changed(false)
 {
 }
 
@@ -45,89 +46,97 @@ Philosopher::~Philosopher()
 
 void Philosopher::setId(uint32_t id)
 {
+	Lock lock(mtxInternal);
 	mId = id;
 }
 
 uint32_t Philosopher::id() const
 {
+	Lock lock(mtxInternal);
 	return mId;
 }
 
-void Philosopher::setHisForks(Fork *leftFork, Fork *rightFork)
+void Philosopher::bindForks(Fork *leftFork, Fork *rightFork)
 {
-	/* bind forks to internal token -> access to resource is always granted */
-	leftForkToken.bind(leftFork);
-	rightForkToken.bind(rightFork);
+	Lock lock(mtxInternal);
 
-	setHisForks(&leftForkToken, &rightForkToken);
+	leftFork = left;
+	rightFork = right
+
+	forks.bind(left);
+	forks.bind(right);
 }
 
-void Philosopher::doStuff()
+void Philosopher::cyclic()
 {
+	Lock lock(mtxInternal);
+
 	switch(state)
 	{
-	case StateStartup:
-		state = StateHungry;
-		isHungry(this);
-		break;
 	case StateHungry:
-		if(forks.fired())
-			state = StateEating;
-
+#ifndef PRODUCE_RACE_CONDITION
+		if(forks.acquire())
+#endif
+			setState(StateEating);
 		break;
-	case StateAcquireRightFork:
 
-		fib.calc(5); /* for deadlock test only */
-
-		if(_acquireRightFork.fired())
-			state = StateEating;
-		break;
 	case StateEating:
-
-		startedEating(this);
-
 		/* read something from data container */
 		leftFork->makeDirty();
 		rightFork->makeDirty();
 
 		/* calculate something */
-		fib.calc(40);
+		sleep(5);
 
 		/* write something to data container */
 		leftFork->makeClean();
 		rightFork->makeClean();
 
-		state = StateWaitForThinking;
+		forks.release();
+		setState(StateThinking);
 		break;
-	case StateWaitForThinking:
-		if(_releaseForks.fired())
-			state = StateThinking;
-		break;
-	case StateThinking:
 
-		startedThinking(this);
+	case StateThinking:
+		sleep(1);
 
 		if(--remThinkCycs)
-		{
-			state = StateHungry;
-			isHungry(this);
-		}else{
-			state = StateDone;
-			finished();
-			finishedThinking(this);
-		}
+			setState(StateHungry);
+		else
+			setState(StateDone);
 		break;
+
 	case StateDone:
 		break;
 	}
 }
 
+bool Philosopher::isEating() const
+{
+	Lock lock(mtxInternal);
+	return StateEating == state;
+}
+
 uint32_t Philosopher::remainingThinkingCycles() const
 {
+	Lock lock(mtxInternal);
 	return remThinkCycs;
 }
 
-bool Philosopher::isFinished() const
+bool Philosopher::ackChanged()
 {
-	return StateDone == state;
+	Lock lock(mtxInternal);
+
+	bool tmpChanged = changed;
+	changed = false;
+
+	return tmpChanged;
 }
+
+void Philosopher::setState(PhilosopherState newState)
+{
+	Lock lock(mtxInternal);
+
+	state = newState;
+	changed = true;
+}
+

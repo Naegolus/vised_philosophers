@@ -32,24 +32,28 @@
 #define SRC_FORK_H_
 
 #include <cstdint>
+#include <iostream>
 #include "Object.h"
-#include "Fibonacci.h"
 
 class Fork : public Object
 {
 public:
-	Fork();
-	virtual ~Fork();
+	Fork() : dirty(0) {}
+	virtual ~Fork()
+	{
+		if (dirty)
+			std::cerr << "Fork: Race condition detected" << std::endl;
+	}
 
-	void makeDirty(); /* non const -> changes fork */
-	void makeClean();
-
-	uint32_t dirtyCount() const;
+	void makeDirty();
+	{ ++dirty; }
+	void makeClean()
+	{ --dirty; }
+	bool isDirty() const
+	{ return dirty; }
 
 private:
-	Fibonacci _fib;
-
-	uint32_t _dirtyCount;
+	uint32_t dirty;
 };
 
 #endif /* SRC_FORK_H_ */
