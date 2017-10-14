@@ -61,7 +61,7 @@ void Philosopher::bindForks(Fork *leftFork, Fork *rightFork)
 	Lock lock(mtxInternal);
 
 	leftFork = left;
-	rightFork = right
+	rightFork = right;
 
 	forks.bind(left);
 	forks.bind(right);
