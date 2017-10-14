@@ -41,7 +41,7 @@ public:
 		if (!resource)
 			return false;
 
-		allRes.insert(std::pair<void *, uint32_t>(resource, false));
+		allRes().insert(std::pair<void *, uint32_t>(resource, false));
 
 		transitionRes.push_back(resource);
 		transitionRes.unique();
@@ -55,29 +55,37 @@ public:
 	*/
 	bool acquire()
 	{
-		Lock lock(mtxRes);
+		Lock lock(mtxRes());
 
 		for (std::list<void *>::const_iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			if (allRes[*iter] == true) /* Resource already taken */
+			if (allRes()[*iter] == true) /* Resource already taken */
 				return false;
 
 		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			allRes[*iter] == true;
+			allRes()[*iter] == true;
 
 		return true;
 	}
 
 	void release()
 	{
-		Lock lock(mtxRes);
+		Lock lock(mtxRes());
 
 		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			allRes[*iter] == false;
+			allRes()[*iter] == false;
 	}
 
 private:
-	static std::mutex mtxRes;
-	static std::map<void *, bool> allRes;
+	static std::mutex &mtxRes()
+	{
+		static std::mutex mtx;
+		return mtx;
+	}
+	static std::map<void *, bool> &allRes()
+	{
+		static std::map<void *, bool> res;
+		return res;
+	}
 
 	std::list<void *> transitionRes;
 };
