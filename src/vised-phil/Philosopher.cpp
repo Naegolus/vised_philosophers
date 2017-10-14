@@ -31,12 +31,12 @@
 #include "Philosopher.h"
 
 Philosopher::Philosopher() :
-			mId(0),
-			leftFork(0),
-			rightFork(0),
-			state(StateHungry),
-			remThinkCycs(NumThinkingCycles),
-			changed(false)
+	mId(0),
+	leftFork(0),
+	rightFork(0),
+	state(StateHungry),
+	remThinkCycs(NumThinkingCycles),
+	changed(false)
 {
 }
 
@@ -71,8 +71,7 @@ void Philosopher::cyclic()
 {
 	Lock lock(mtxInternal);
 
-	switch(state)
-	{
+	switch(state) {
 	case StateHungry:
 #ifndef PRODUCE_RACE_CONDITION
 		if(forks.acquire())

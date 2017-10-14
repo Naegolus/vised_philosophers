@@ -51,8 +51,7 @@ ThreadLoop::~ThreadLoop()
 
 void ThreadLoop::start()
 {
-	if(_p_thread)
-	{
+	if(_p_thread) {
 		cerr << "ThreadLoop: Thread isn't shutdown" << endl;
 		return;
 	}
@@ -64,14 +63,12 @@ void ThreadLoop::start()
 
 void ThreadLoop::start(const uint32_t msec)
 {
-	if(!msec)
-	{
+	if(!msec) {
 		cerr << "ThreadLoop: Interval is zero" << endl;
 		return;
 	}
 
-	if(_p_thread)
-	{
+	if(_p_thread) {
 		cerr << "ThreadLoop: Thread isn't shutdown" << endl;
 		return;
 	}
@@ -95,8 +92,7 @@ void ThreadLoop::join()
 	if(!_p_thread)
 		return;
 
-	if(this_thread::get_id() == _p_thread->get_id())
-	{
+	if(this_thread::get_id() == _p_thread->get_id()) {
 		cerr << "ThreadLoop: Design error. join() called by own thread => Deadlock" << endl;
 		cerr << "  Must be called by different thread!" << endl;
 		return;
@@ -127,8 +123,7 @@ bool ThreadLoop::joinOrShutdown(const uint32_t timeout_ms, bool shutdown)
 	if(!_p_thread)
 		return true; /* already shutdown */
 
-	if(this_thread::get_id() == _p_thread->get_id())
-	{
+	if(this_thread::get_id() == _p_thread->get_id()) {
 		cerr << "ThreadLoop: Design error. join() or shutdown() called by own thread => Deadlock" << endl;
 		cerr << "  Must be called by different thread!" << endl;
 		return false;
@@ -151,10 +146,8 @@ bool ThreadLoop::killedByTimeout(uint32_t timeout_ms)
 	clock_t t;
 
 	t = clock();
-	while(!isFinished())
-	{
-		if(((float)(clock() - t) * (TICK_TO_SEC * SEC_TO_MS)) > timeout_ms)
-		{
+	while(!isFinished()) {
+		if(((float)(clock() - t) * (TICK_TO_SEC * SEC_TO_MS)) > timeout_ms) {
 			cerr << "ThreadLoop: Timeout => Have to kill() thread" << endl;
 			kill();
 			return true;
@@ -166,8 +159,7 @@ bool ThreadLoop::killedByTimeout(uint32_t timeout_ms)
 
 void ThreadLoop::kill()
 {
-	if(!_p_thread)
-	{
+	if(!_p_thread) {
 		delete _p_thread;
 		_p_thread = 0;
 		_threadRunning = false;
@@ -179,8 +171,7 @@ void ThreadLoop::tick()
 {
 	chrono::milliseconds interval(_timerInterval);
 
-	while(_threadRunning)
-	{
+	while(_threadRunning) {
 		this_thread::sleep_for(interval);
 		ticked();
 	}

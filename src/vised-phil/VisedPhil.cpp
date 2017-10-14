@@ -36,11 +36,11 @@
 using namespace std;
 
 VisedPhil::VisedPhil() :
-			appRunning(true),
-			numPhilosophers(0),
-			forks(0),
-			philosophers(0),
-			threads(0)
+	appRunning(true),
+	numPhilosophers(0),
+	forks(0),
+	philosophers(0),
+	threads(0)
 {
 }
 
@@ -63,8 +63,7 @@ int VisedPhil::exec(int argc, char *argv[])
 
 	appInit();
 
-	while (appRunning)
-	{
+	while (appRunning) {
 		appCycle();
 		this_thread::sleep_for(interval);
 	}
@@ -81,8 +80,7 @@ void VisedPhil::appInit()
 	ThreadLoop *thread = threads = new ThreadLoop[numPhilosophers];
 	forks = new Fork[numPhilosophers];
 
-	for(uint32_t i = 0; i < numPhilosophers; ++i)
-	{
+	for(uint32_t i = 0; i < numPhilosophers; ++i) {
 		thread->ticked.connect(phil, &Philosopher::cyclic);
 
 		n = i ? i - 1 : numPhilosophers - 1;
@@ -103,10 +101,8 @@ void VisedPhil::appCycle()
 
 	appRunning = false;
 
-	for(uint32_t i = 0; i < numPhilosophers; ++i)
-	{
-		if (phil->ackChanged() and not statusPrinted)
-		{
+	for(uint32_t i = 0; i < numPhilosophers; ++i) {
+		if (phil->ackChanged() and not statusPrinted) {
 			printStatus();
 			statusPrinted = true;
 		}

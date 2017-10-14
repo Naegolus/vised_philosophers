@@ -60,13 +60,11 @@ bool Transition::fired() const
 	Lock lock(mtxFire);
 
 	/* check if transition is able to fire */
-	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token)
-	{
+	for(ConstIter token = inputs.begin(); token != inputs.end(); ++token) {
 		if((*token)->isEmpty())
 			return false;
 	}
-	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token)
-	{
+	for(ConstIter token = outputs.begin(); token != outputs.end(); ++token) {
 		if((*token)->isFull())
 			return false;
 	}
