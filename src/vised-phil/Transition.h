@@ -66,7 +66,7 @@ public:
 				return false;
 
 		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			allRes()[*iter] == true;
+			allRes()[*iter] = true;
 
 		return true;
 	}
