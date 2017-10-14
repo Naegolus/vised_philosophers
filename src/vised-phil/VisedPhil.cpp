@@ -118,10 +118,30 @@ void VisedPhil::appCycle()
 	}
 }
 
-/* Only print status if something has changed */
+/* Only print status if something has changed. Format:
+	Philosopher - Eating - Progress
+	         10        x   |==== | 4/5 */
 void VisedPhil::printStatus()
 {
-	/* Philosopher - Eating - Progress */
-	/*          10        x   |==== | 4/5 */
+	Philosopher *phil = philosophers;
+
+#if 0
+	if (system("CLS"))
+		system("clear");
+#endif
+
+	for(uint32_t i = 0; i < numPhilosophers; ++i) {
+		cout << phil->id();
+		cout << " ";
+		if (phil->isEating())
+			cout << "x";
+		else
+			cout << " ";
+		cout << " ";
+		cout << phil->remainingCycles();
+		cout << endl;
+
+		++phil;
+	}
 }
 
