@@ -39,7 +39,7 @@ Philosopher::Philosopher() :
 	rightFork(0),
 	state(StateHungry),
 	remThinkCycs(NumThinkingCycles),
-	changed(false)
+	changed(true)
 {
 }
 
