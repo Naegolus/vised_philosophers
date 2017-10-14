@@ -41,7 +41,7 @@ public:
 		if (!resource)
 			return false;
 
-		allRes().insert(std::pair<void *, uint32_t>(resource, false));
+		allRes().insert(std::pair<void *, bool>(resource, false));
 
 		transitionRes.push_back(resource);
 		transitionRes.unique();
