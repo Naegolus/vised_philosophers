@@ -62,7 +62,7 @@ public:
 			return false;
 
 		for (std::list<void *>::const_iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			if (allRes()[*iter] == true) /* Resource already taken */
+			if (allRes()[*iter]) /* Resource already taken */
 				return false;
 
 		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
