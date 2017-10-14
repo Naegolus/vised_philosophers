@@ -87,9 +87,13 @@ void VisedPhil::appInit()
 		phil->setId(i);
 		phil->bindForks(&forks[i], &forks[n]);
 
-		thread->start();
-
 		++phil;
+		++thread;
+	}
+
+	thread = threads;
+	for(uint32_t i = 0; i < numPhilosophers; ++i) {
+		thread->start();
 		++thread;
 	}
 }
