@@ -28,7 +28,10 @@
  -----------------------------------------------------------------------------
  ----------------------------------------------------------------------------- */
 
+#include <thread>
 #include "Philosopher.h"
+
+using namespace std;
 
 Philosopher::Philosopher() :
 	mId(0),
@@ -50,13 +53,13 @@ void Philosopher::setId(uint32_t id)
 	mId = id;
 }
 
-uint32_t Philosopher::id() const
+uint32_t Philosopher::id()
 {
 	Lock lock(mtxInternal);
 	return mId;
 }
 
-void Philosopher::bindForks(Fork *leftFork, Fork *rightFork)
+void Philosopher::bindForks(Fork *left, Fork *right)
 {
 	Lock lock(mtxInternal);
 
@@ -85,7 +88,7 @@ void Philosopher::cyclic()
 		rightFork->makeDirty();
 
 		/* calculate something */
-		sleep(5);
+		this_thread::sleep_for(chrono::seconds(5));
 
 		/* write something to data container */
 		leftFork->makeClean();
@@ -96,7 +99,7 @@ void Philosopher::cyclic()
 		break;
 
 	case StateThinking:
-		sleep(1);
+		this_thread::sleep_for(chrono::seconds(1));
 
 		if(--remThinkCycs)
 			setState(StateHungry);
@@ -109,13 +112,13 @@ void Philosopher::cyclic()
 	}
 }
 
-bool Philosopher::isEating() const
+bool Philosopher::isEating()
 {
 	Lock lock(mtxInternal);
 	return StateEating == state;
 }
 
-uint32_t Philosopher::remainingThinkingCycles() const
+uint32_t Philosopher::remainingCycles()
 {
 	Lock lock(mtxInternal);
 	return remThinkCycs;

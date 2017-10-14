@@ -29,7 +29,6 @@
  ----------------------------------------------------------------------------- */
 
 #include <iostream>
-#include <stdlib.h>
 #include "VisedPhil.h"
 #include "config.h"
 
@@ -46,6 +45,7 @@ VisedPhil::VisedPhil() :
 
 VisedPhil::~VisedPhil()
 {
+	delete[] forks;
 	delete[] philosophers;
 	delete[] threads;
 }
@@ -85,9 +85,9 @@ void VisedPhil::appInit()
 
 		n = i ? i - 1 : numPhilosophers - 1;
 		phil->setId(i);
-		phil->bindForks(forks(i), forks(n));
+		phil->bindForks(&forks[i], &forks[n]);
 
-		thread.start();
+		thread->start();
 
 		++phil;
 		++thread;
@@ -107,7 +107,7 @@ void VisedPhil::appCycle()
 			statusPrinted = true;
 		}
 
-		if (phil->remainingThinkingCycles())
+		if (phil->remainingCycles())
 			appRunning = true;
 
 		++phil;

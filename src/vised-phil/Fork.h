@@ -45,7 +45,7 @@ public:
 			std::cerr << "Fork: Race condition detected" << std::endl;
 	}
 
-	void makeDirty();
+	void makeDirty()
 	{ ++dirty; }
 	void makeClean()
 	{ --dirty; }

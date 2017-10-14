@@ -32,10 +32,9 @@
 #define VISED_PHIL_H_
 
 #include <cstdint>
-#include <mutex>
 #include "Object.h"
-#include "Philosopher.h"
 #include "ThreadLoop.h"
+#include "Philosopher.h"
 
 class VisedPhil : public Object
 {
@@ -47,7 +46,7 @@ public:
 	void appCycle();
 
 private:
-	void connectObjects();
+	void appInit();
 	void printStatus();
 
 	bool appRunning;

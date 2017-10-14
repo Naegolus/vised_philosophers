@@ -26,10 +26,9 @@
 
 #include <mutex>
 #include <list>
-#include "data_token.h"
+#include <map>
 
-typedef lock_guard<mutex> Lock;
-typedef list<DataTokenBase *>::const_iterator ConstIter;
+typedef std::lock_guard<std::mutex> Lock;
 
 class Transition
 {
@@ -54,25 +53,25 @@ public:
 		false if:
 		- at least one of the resources can't be aquired at the time being
 	*/
-	bool acquire(std::list<void *> &transitionResources)
+	bool acquire()
 	{
 		Lock lock(mtxRes);
 
-		for (std::list<void *>:const_iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
+		for (std::list<void *>::const_iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
 			if (allRes[*iter] == true) /* Resource already taken */
 				return false;
 
-		for (std::list<void *>:iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
+		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
 			allRes[*iter] == true;
 
 		return true;
 	}
 
-	void release(std::list<void *> &transitionResources)
+	void release()
 	{
 		Lock lock(mtxRes);
 
-		for (std::list<void *>:iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
+		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
 			allRes[*iter] == false;
 	}
 

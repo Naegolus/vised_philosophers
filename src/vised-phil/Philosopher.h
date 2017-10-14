@@ -32,6 +32,7 @@
 #define SRC_PHILOSOPHER_H_
 
 #include "Object.h"
+#include "Transition.h"
 #include "Fork.h"
 
 class Philosopher : public Object
@@ -41,13 +42,13 @@ public:
 	virtual ~Philosopher();
 
 	void setId(uint32_t id);
-	uint32_t id() const;
+	uint32_t id();
 
 	void bindForks(Fork *left, Fork *right);
 
 	void cyclic();
-	bool isEating() const;
-	uint32_t remainingCycles() const
+	bool isEating();
+	uint32_t remainingCycles();
 
 	bool ackChanged();
 
