@@ -54,7 +54,7 @@ int VisedPhil::exec(int argc, char *argv[])
 {
 	chrono::milliseconds interval(CHECK_INTERVAL);
 
-	cout << endl << "Executing " << VERSION << endl << endl;
+	cout << endl << "Executing '" << PACKAGE_STRING << "'" << endl << endl;
 
 	if (1 < argc)
 		numPhilosophers = atoi(argv[1]);
