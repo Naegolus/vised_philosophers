@@ -37,7 +37,7 @@ using namespace std;
 
 ThreadLoop::ThreadLoop() :
 	_p_thread(NULL),
-	_timerInterval(100),
+	_timerInterval(20),
 	_threadRunning(false),
 	_threadIsDone(true)
 {
