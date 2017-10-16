@@ -86,25 +86,19 @@ void VisedPhil::appInit()
 	forks = new Fork[numPhilosophers];
 
 	for(uint32_t i = 0; i < numPhilosophers; ++i) {
-		thread->ticked.connect(phil, &Philosopher::cyclic);
-
 		n = i ? i - 1 : numPhilosophers - 1;
 		phil->setId(i);
 		phil->setThinkingCycles(numThinkingCycles);
 		phil->bindForks(&forks[i], &forks[n]);
 		phil->changed.connect(this, &VisedPhil::printStatusAndCheckShutdown);
 
+#if USE_MULTI_THREADING
+		thread->ticked.connect(phil, &Philosopher::cyclic);
+		thread->start();
+#endif
 		++phil;
 		++thread;
 	}
-
-#if USE_MULTI_THREADING
-	thread = threads;
-	for(uint32_t i = 0; i < numPhilosophers; ++i) {
-		thread->start();
-		++thread;
-	}
-#endif
 }
 
 /* Only print status if something has changed. Format:
