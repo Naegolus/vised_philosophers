@@ -102,6 +102,7 @@ void VisedPhil::printStatus()
 	*/
 	Lock lock(mtxInternal);
 
+	bool applicationShutdown = true;
 	Philosopher *phil = philosophers;
 
 #if 0
@@ -120,7 +121,13 @@ void VisedPhil::printStatus()
 		cout << phil->remainingCycles();
 		cout << endl;
 
+		if (phil->remainingCycles())
+			applicationShutdown = false;
+
 		++phil;
 	}
+
+	if (applicationShutdown)
+		appRunning = false;
 }
 
