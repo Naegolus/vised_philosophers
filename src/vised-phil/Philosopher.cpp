@@ -64,8 +64,6 @@ void Philosopher::bindForks(Fork *left, Fork *right)
 
 void Philosopher::cyclic()
 {
-	Lock lock(mtxInternal);
-
 	switch(state) {
 	case StateHungry:
 #ifndef PRODUCE_RACE_CONDITION
