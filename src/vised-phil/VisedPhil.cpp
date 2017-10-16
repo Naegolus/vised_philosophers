@@ -105,10 +105,8 @@ void VisedPhil::printStatus()
 	bool applicationShutdown = true;
 	Philosopher *phil = philosophers;
 
-#if 0
 	if (system("CLS"))
 		system("clear");
-#endif
 
 	for(uint32_t i = 0; i < numPhilosophers; ++i) {
 		cout << phil->id();
