@@ -24,6 +24,7 @@
 #ifndef TRANSITION_H_
 #define TRANSITION_H_
 
+#include <iostream>
 #include <mutex>
 #include <list>
 #include <map>
@@ -58,8 +59,10 @@ public:
 	{
 		Lock lock(mtxRes());
 
-		if (!transitionRes.size())
+		if (!transitionRes.size()) {
+			std::cerr << "Error: Nothing bound to transition" << std::endl;
 			return false;
+		}
 
 		for (std::list<void *>::const_iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
 			if (allRes()[*iter]) /* Resource already taken */
