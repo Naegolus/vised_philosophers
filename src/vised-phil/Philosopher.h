@@ -43,7 +43,8 @@ public:
 	bool isEating();
 	uint32_t remainingCycles();
 
-	bool ackChanged();
+	/* signals */
+	signal0<> changed;
 
 private:
 	typedef enum
@@ -59,7 +60,6 @@ private:
 	std::mutex mtxInternal;
 	uint32_t mId;
 	uint32_t remThinkCycs;
-	bool changed;
 	Fork *leftFork;
 	Fork *rightFork;
 	Transition forks;

@@ -57,7 +57,6 @@ int VisedPhil::exec(int argc, char *argv[])
 	appInit();
 
 	while (appRunning) {
-		appCycle();
 		this_thread::sleep_for(interval);
 	}
 
@@ -79,6 +78,7 @@ void VisedPhil::appInit()
 		n = i ? i - 1 : numPhilosophers - 1;
 		phil->setId(i);
 		phil->bindForks(&forks[i], &forks[n]);
+		phil->changed.connect(this, &VisedPhil::printStatus);
 
 		++phil;
 		++thread;
@@ -91,31 +91,13 @@ void VisedPhil::appInit()
 	}
 }
 
-void VisedPhil::appCycle()
-{
-	Philosopher *phil = philosophers;
-	bool statusPrinted = false;
-
-	appRunning = false;
-
-	for(uint32_t i = 0; i < numPhilosophers; ++i) {
-		if (phil->ackChanged() and not statusPrinted) {
-			printStatus();
-			statusPrinted = true;
-		}
-
-		if (phil->remainingCycles())
-			appRunning = true;
-
-		++phil;
-	}
-}
-
 /* Only print status if something has changed. Format:
 	Philosopher - Eating - Progress
 	         10        x   |==== | 4/5 */
 void VisedPhil::printStatus()
 {
+	Lock lock(mtxInternal);
+
 	Philosopher *phil = philosophers;
 
 #if 0

@@ -31,8 +31,7 @@ Philosopher::Philosopher() :
 	leftFork(0),
 	rightFork(0),
 	state(StateHungry),
-	remThinkCycs(NumThinkingCycles),
-	changed(true)
+	remThinkCycs(NumThinkingCycles)
 {
 }
 
@@ -117,21 +116,13 @@ uint32_t Philosopher::remainingCycles()
 	return remThinkCycs;
 }
 
-bool Philosopher::ackChanged()
-{
-	Lock lock(mtxInternal);
-
-	bool tmpChanged = changed;
-	changed = false;
-
-	return tmpChanged;
-}
-
 void Philosopher::setState(PhilosopherState newState)
 {
-	Lock lock(mtxInternal);
-
-	state = newState;
-	changed = true;
+	{
+		Lock lock(mtxInternal);
+		state = newState;
+	}
+	/* signal must be emitted outside of state mutex */
+	changed();
 }
 
