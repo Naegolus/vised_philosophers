@@ -24,6 +24,8 @@
 #include <thread>
 #include "Philosopher.h"
 
+#define PRODUCE_RACE_CONDITION 0
+
 using namespace std;
 
 Philosopher::Philosopher()
@@ -72,7 +74,7 @@ void Philosopher::cyclic()
 {
 	switch(state) {
 	case StateHungry:
-#ifndef PRODUCE_RACE_CONDITION
+#if not(PRODUCE_RACE_CONDITION)
 		if(forks.acquire())
 #endif
 			setState(StateEating);
@@ -82,9 +84,6 @@ void Philosopher::cyclic()
 		/* read something from data container */
 		leftFork->makeDirty();
 		rightFork->makeDirty();
-
-		/* calculate something */
-		this_thread::sleep_for(chrono::milliseconds(1000));
 
 		/* write something to data container */
 		leftFork->makeClean();

@@ -33,6 +33,8 @@
 
 #include <cstdint>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "Object.h"
 
 class Fork : public Object
@@ -46,11 +48,22 @@ public:
 	}
 
 	void makeDirty()
-	{ ++dirty; }
+	{
+		uint32_t _dirty = dirty;
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		++_dirty;
+		dirty = _dirty;
+	}
+
 	void makeClean()
-	{ --dirty; }
+	{
+		--dirty;
+	}
+
 	bool isDirty() const
-	{ return dirty; }
+	{
+		return dirty;
+	}
 
 private:
 	uint32_t dirty;

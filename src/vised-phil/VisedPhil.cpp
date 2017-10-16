@@ -26,6 +26,8 @@
 #include "VisedPhil.h"
 #include "config.h"
 
+#define PRODUCE_DIRTY_OUTPUT 0
+
 using namespace std;
 
 VisedPhil::VisedPhil()
@@ -106,7 +108,9 @@ void VisedPhil::printStatusAndCheckShutdown()
 	/* This function is executed by external threads.
 		Therefore it's a critical section!
 	*/
+#if not(PRODUCE_DIRTY_OUTPUT)
 	Lock lock(mtxInternal);
+#endif
 
 	bool applicationShutdown = true;
 	Philosopher *phil = philosophers;
