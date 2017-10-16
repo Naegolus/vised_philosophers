@@ -22,8 +22,7 @@
 
 bin_PROGRAMS = vised-phil
 
-vised_phil_SOURCES = main.cpp VisedPhil.cpp Philosopher.cpp \
-		ThreadLoop.cpp
+vised_phil_SOURCES = main.cpp VisedPhil.cpp Philosopher.cpp
 
 AM_CPPFLAGS = \
 		-I${srcdir}/include \
