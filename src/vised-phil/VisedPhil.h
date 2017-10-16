@@ -44,6 +44,7 @@ private:
 
 	bool appRunning;
 	uint32_t numPhilosophers;
+	uint32_t numThinkingCycles;
 	std::mutex mtxInternal;
 	Fork *forks;
 	Philosopher *philosophers;

@@ -22,18 +22,19 @@
 */
 
 #include <iostream>
+#include <iomanip>
 #include "VisedPhil.h"
 #include "config.h"
 
 using namespace std;
 
-VisedPhil::VisedPhil() :
-	appRunning(true),
-	numPhilosophers(0),
-	forks(0),
-	philosophers(0),
-	threads(0)
+VisedPhil::VisedPhil()
 {
+	appRunning = true;
+	numPhilosophers = 0;
+	forks = 0;
+	philosophers = 0;
+	threads = 0;
 }
 
 VisedPhil::~VisedPhil()
@@ -52,7 +53,12 @@ int VisedPhil::exec(int argc, char *argv[])
 	if (1 < argc)
 		numPhilosophers = atoi(argv[1]);
 	else
-		numPhilosophers = 5;
+		numPhilosophers = 3;
+
+	if (2 < argc)
+		numThinkingCycles = atoi(argv[2]);
+	else
+		numThinkingCycles = 2;
 
 	appInit();
 
@@ -60,7 +66,7 @@ int VisedPhil::exec(int argc, char *argv[])
 		this_thread::sleep_for(interval);
 	}
 
-	cout << endl << "Finished" << endl << endl;
+	cout << endl << "  Finished" << endl << endl;
 
 	return 0;
 }
@@ -77,6 +83,7 @@ void VisedPhil::appInit()
 
 		n = i ? i - 1 : numPhilosophers - 1;
 		phil->setId(i);
+		phil->setThinkingCycles(numThinkingCycles);
 		phil->bindForks(&forks[i], &forks[n]);
 		phil->changed.connect(this, &VisedPhil::printStatus);
 
@@ -104,22 +111,36 @@ void VisedPhil::printStatus()
 
 	bool applicationShutdown = true;
 	Philosopher *phil = philosophers;
+	uint32_t remCyc;
 
-	if (system("CLS"))
-		system("clear");
+	system("clear");
 
+	cout << endl;
+	cout << "  Philosopher - Eating - Thinking Progress" << endl;
 	for(uint32_t i = 0; i < numPhilosophers; ++i) {
-		cout << phil->id();
-		cout << " ";
+		cout << "  ";
+		cout << setw(11) << phil->id();
+		cout << "   ";
+
 		if (phil->isEating())
-			cout << "x";
+			cout << setw(6) << "x";
 		else
-			cout << " ";
-		cout << " ";
-		cout << phil->remainingCycles();
+			cout << setw(6) << " ";
+
+		remCyc = phil->remainingCycles();
+		cout << "   |";
+		for (uint32_t n = 0; n < numThinkingCycles; ++n)
+		{
+			if (n < numThinkingCycles - remCyc)
+				cout << "=";
+			else
+				cout << " ";
+		}
+		cout << "|";
+
 		cout << endl;
 
-		if (phil->remainingCycles())
+		if (remCyc)
 			applicationShutdown = false;
 
 		++phil;

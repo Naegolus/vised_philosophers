@@ -39,18 +39,23 @@ Philosopher::~Philosopher()
 {
 }
 
+/* init */
 void Philosopher::setId(uint32_t id)
 {
 	Lock lock(mtxInternal);
 	mId = id;
 }
-
 uint32_t Philosopher::id()
 {
 	Lock lock(mtxInternal);
 	return mId;
 }
-
+void Philosopher::setThinkingCycles(uint32_t remThinkingCycles)
+{
+	Lock lock(mtxInternal);
+	if (remThinkingCycles)
+		remThinkCycs = remThinkingCycles;
+}
 void Philosopher::bindForks(Fork *left, Fork *right)
 {
 	Lock lock(mtxInternal);
@@ -62,6 +67,7 @@ void Philosopher::bindForks(Fork *left, Fork *right)
 	forks.bind(right);
 }
 
+/* cyclic */
 void Philosopher::cyclic()
 {
 	switch(state) {
@@ -78,18 +84,19 @@ void Philosopher::cyclic()
 		rightFork->makeDirty();
 
 		/* calculate something */
-		this_thread::sleep_for(chrono::seconds(5));
+		this_thread::sleep_for(chrono::milliseconds(1000));
 
 		/* write something to data container */
 		leftFork->makeClean();
 		rightFork->makeClean();
 
 		forks.release();
+
 		setState(StateThinking);
 		break;
 
 	case StateThinking:
-		this_thread::sleep_for(chrono::seconds(1));
+		this_thread::sleep_for(chrono::milliseconds(200));
 
 		if(decrementTinkCycles())
 			setState(StateHungry);
@@ -102,11 +109,11 @@ void Philosopher::cyclic()
 	}
 }
 
-uint32_t Philosopher::decrementTinkCycles()
+/* states */
+bool Philosopher::isEating()
 {
 	Lock lock(mtxInternal);
-	--remThinkCycs;
-	return remThinkCycs;
+	return StateEating == state;
 }
 uint32_t Philosopher::remainingCycles()
 {
@@ -114,6 +121,7 @@ uint32_t Philosopher::remainingCycles()
 	return remThinkCycs;
 }
 
+/* internal functions */
 void Philosopher::setState(PhilosopherState newState)
 {
 	{
@@ -123,10 +131,10 @@ void Philosopher::setState(PhilosopherState newState)
 	/* signal must be emitted outside of state mutex */
 	changed();
 }
-
-bool Philosopher::isEating()
+uint32_t Philosopher::decrementTinkCycles()
 {
 	Lock lock(mtxInternal);
-	return StateEating == state;
+	--remThinkCycs;
+	return remThinkCycs;
 }
 

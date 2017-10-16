@@ -34,12 +34,16 @@ public:
 	Philosopher();
 	virtual ~Philosopher();
 
+	/* init */
 	void setId(uint32_t id);
 	uint32_t id();
-
+	void setThinkingCycles(uint32_t remThinkingCycles);
 	void bindForks(Fork *left, Fork *right);
 
+	/* cyclic */
 	void cyclic();
+
+	/* states */
 	bool isEating();
 	uint32_t remainingCycles();
 
@@ -55,8 +59,9 @@ private:
 		StateDone
 	} PhilosopherState;
 
-	uint32_t decrementTinkCycles();
+	/* internal functions */
 	void setState(PhilosopherState newState);
+	uint32_t decrementTinkCycles();
 
 	std::mutex mtxInternal;
 	uint32_t mId;
