@@ -27,6 +27,7 @@
 #include "config.h"
 
 #define PRODUCE_DIRTY_OUTPUT 0
+#define USE_MULTI_THREADING  1
 
 using namespace std;
 
@@ -61,8 +62,16 @@ int VisedPhil::exec(int argc, char *argv[])
 
 	appInit();
 
-	while (appRunning)
+	while (appRunning) {
+#if not(USE_MULTI_THREADING)
+		Philosopher *phil = philosophers;
+		for(uint32_t i = 0; i < numPhilosophers; ++i) {
+			phil->cyclic();
+			++phil;
+		}
+#endif
 		this_thread::sleep_for(interval);
+	}
 
 	cout << endl << "  Finished" << endl << endl;
 
@@ -89,11 +98,13 @@ void VisedPhil::appInit()
 		++thread;
 	}
 
+#if USE_MULTI_THREADING
 	thread = threads;
 	for(uint32_t i = 0; i < numPhilosophers; ++i) {
 		thread->start();
 		++thread;
 	}
+#endif
 }
 
 /* Only print status if something has changed. Format:
