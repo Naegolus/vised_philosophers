@@ -33,7 +33,8 @@ using namespace std;
 VisedPhil::VisedPhil()
 {
 	appRunning = true;
-	numPhilosophers = 0;
+	numPhilosophers = 5;
+	numThinkingCycles = 3;
 	forks = 0;
 	philosophers = 0;
 	threads = 0;
@@ -54,13 +55,9 @@ int VisedPhil::exec(int argc, char *argv[])
 
 	if (1 < argc)
 		numPhilosophers = atoi(argv[1]);
-	else
-		numPhilosophers = 5;
 
 	if (2 < argc)
 		numThinkingCycles = atoi(argv[2]);
-	else
-		numThinkingCycles = 3;
 
 	appInit();
 
