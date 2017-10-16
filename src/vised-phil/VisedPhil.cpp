@@ -53,12 +53,12 @@ int VisedPhil::exec(int argc, char *argv[])
 	if (1 < argc)
 		numPhilosophers = atoi(argv[1]);
 	else
-		numPhilosophers = 3;
+		numPhilosophers = 5;
 
 	if (2 < argc)
 		numThinkingCycles = atoi(argv[2]);
 	else
-		numThinkingCycles = 2;
+		numThinkingCycles = 3;
 
 	appInit();
 
