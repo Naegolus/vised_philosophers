@@ -91,7 +91,7 @@ void Philosopher::cyclic()
 	case StateThinking:
 		this_thread::sleep_for(chrono::seconds(1));
 
-		if(--remThinkCycs)
+		if(decrementTinkCycles())
 			setState(StateHungry);
 		else
 			setState(StateDone);
@@ -102,12 +102,12 @@ void Philosopher::cyclic()
 	}
 }
 
-bool Philosopher::isEating()
+uint32_t Philosopher::decrementTinkCycles()
 {
 	Lock lock(mtxInternal);
-	return StateEating == state;
+	--remThinkCycs;
+	return remThinkCycs;
 }
-
 uint32_t Philosopher::remainingCycles()
 {
 	Lock lock(mtxInternal);
@@ -122,5 +122,11 @@ void Philosopher::setState(PhilosopherState newState)
 	}
 	/* signal must be emitted outside of state mutex */
 	changed();
+}
+
+bool Philosopher::isEating()
+{
+	Lock lock(mtxInternal);
+	return StateEating == state;
 }
 

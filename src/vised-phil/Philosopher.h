@@ -55,6 +55,7 @@ private:
 		StateDone
 	} PhilosopherState;
 
+	uint32_t decrementTinkCycles();
 	void setState(PhilosopherState newState);
 
 	std::mutex mtxInternal;
