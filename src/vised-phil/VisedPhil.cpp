@@ -62,9 +62,8 @@ int VisedPhil::exec(int argc, char *argv[])
 
 	appInit();
 
-	while (appRunning) {
+	while (appRunning)
 		this_thread::sleep_for(interval);
-	}
 
 	cout << endl << "  Finished" << endl << endl;
 
@@ -136,7 +135,7 @@ void VisedPhil::printStatus()
 			else
 				cout << " ";
 		}
-		cout << "|";
+		cout << "| " << (numThinkingCycles - remCyc) << "/" << numThinkingCycles;
 
 		cout << endl;
 
