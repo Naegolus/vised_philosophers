@@ -93,9 +93,13 @@ void VisedPhil::appInit()
 
 /* Only print status if something has changed. Format:
 	Philosopher - Eating - Progress
-	         10        x   |==== | 4/5 */
+	         10        x   |==== | 4/5
+*/
 void VisedPhil::printStatus()
 {
+	/* This function is executed by external threads.
+		Therefore it's a critical section!
+	*/
 	Lock lock(mtxInternal);
 
 	Philosopher *phil = philosophers;
