@@ -42,6 +42,8 @@ public:
 		if (!resource)
 			return false;
 
+		Lock lock(mtxRes());
+
 		allRes().insert(std::pair<void *, bool>(resource, false));
 
 		transitionRes.push_back(resource);
