@@ -1,3 +1,5 @@
 Target for this repository:
-- DataToken and Transition class specification for project vised
-- Test driver for those classes
+- Classes
+  - ThreadLoop
+  - Transition
+- Test driver for these classes
