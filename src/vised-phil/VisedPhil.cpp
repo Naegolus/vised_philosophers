@@ -84,7 +84,7 @@ void VisedPhil::appInit()
 		phil->setId(i);
 		phil->setThinkingCycles(numThinkingCycles);
 		phil->bindForks(&forks[i], &forks[n]);
-		phil->changed.connect(this, &VisedPhil::printStatus);
+		phil->changed.connect(this, &VisedPhil::printStatusAndCheckShutdown);
 
 		++phil;
 		++thread;
@@ -101,7 +101,7 @@ void VisedPhil::appInit()
 	Philosopher - Eating - Progress
 	         10        x   |==== | 4/5
 */
-void VisedPhil::printStatus()
+void VisedPhil::printStatusAndCheckShutdown()
 {
 	/* This function is executed by external threads.
 		Therefore it's a critical section!
