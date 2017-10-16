@@ -76,7 +76,7 @@ public:
 		Lock lock(mtxRes());
 
 		for (std::list<void *>::iterator iter = transitionRes.begin(); iter != transitionRes.end(); ++iter)
-			allRes()[*iter] == false;
+			allRes()[*iter] = false;
 	}
 
 private:
