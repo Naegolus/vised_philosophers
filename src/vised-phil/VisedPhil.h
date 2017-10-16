@@ -40,7 +40,7 @@ public:
 
 private:
 	void appInit();
-	void printStatus();
+	void printStatusAndCheckShutdown();
 
 	bool appRunning;
 	uint32_t numPhilosophers;
