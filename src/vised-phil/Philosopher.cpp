@@ -26,13 +26,13 @@
 
 using namespace std;
 
-Philosopher::Philosopher() :
-	mId(0),
-	leftFork(0),
-	rightFork(0),
-	state(StateHungry),
-	remThinkCycs(NumThinkingCycles)
+Philosopher::Philosopher()
 {
+	mId = 0;
+	leftFork = 0;
+	rightFork = 0;
+	state = StateHungry;
+	remThinkCycs = NumThinkingCycles;
 }
 
 Philosopher::~Philosopher()
